@@ -1,0 +1,1053 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>محاكي الاختبارات المهنية</title>
+  <link rel="icon" type="image/png" href="https://c.top4top.io/p_3779618yv1.png">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    html { font-size: 18px; }
+    * { font-family: 'Cairo', sans-serif; box-sizing: border-box; }
+    body { background: linear-gradient(135deg, #0f0c29 0%, #1a1340 50%, #24243e 100%); min-height: 100vh; font-size: 1rem; }
+    .tab-active { background: linear-gradient(135deg, #22c55e, #15803d); color: white; box-shadow: 0 8px 20px rgba(34,197,94,0.4); transform: translateY(-2px); }
+    .card-hover { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .card-hover:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(34,197,94,0.3); }
+    .fade-in { animation: fadeIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes pulse3d { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes glow { 0%,100% { box-shadow: 0 0 15px rgba(34,197,94,0.2); } 50% { box-shadow: 0 0 30px rgba(34,197,94,0.5); } }
+    .float-icon { animation: float 3s ease-in-out infinite; }
+    .pulse-3d { animation: pulse3d 2s ease-in-out infinite; display: inline-block; }
+    .shimmer-text { background: linear-gradient(90deg, #22c55e, #86efac, #22c55e, #86efac, #22c55e); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 3s linear infinite; }
+    .glass-card { background: rgba(255,255,255,0.06); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
+    .icon-3d { font-size: 2.5rem; filter: drop-shadow(0 6px 10px rgba(0,0,0,0.4)); display: inline-block; transition: transform 0.3s ease; }
+    .correct-answer { background: rgba(34,197,94,0.15); border-color: #22c55e; color: #22c55e; font-weight: bold; }
+    .wrong-answer { background: rgba(220,38,38,0.15); border-color: #dc2626; color: #ef4444; font-weight: bold; }
+    .option-btn { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+    .progress-bar { height: 6px; background: linear-gradient(90deg, #dc2626, #f59e0b, #22c55e); border-radius: 3px; box-shadow: 0 0 12px rgba(34,197,94,0.5); transition: width 0.5s ease; }
+    .question-counter { background: linear-gradient(135deg, #22c55e, #15803d); color: white; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 8px 16px rgba(34,197,94,0.4), inset 0 -2px 4px rgba(0,0,0,0.2); }
+    .btn-3d { box-shadow: 0 6px 0 rgba(0,0,0,0.3), 0 8px 20px rgba(0,0,0,0.15); transition: all 0.15s; border-radius: 12px; }
+    .btn-3d:hover { transform: translateY(-3px); box-shadow: 0 9px 0 rgba(0,0,0,0.3), 0 12px 28px rgba(0,0,0,0.2); }
+    .btn-3d:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
+    .rank-card-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.7rem; box-shadow: 0 6px 12px rgba(0,0,0,0.25), inset 0 -2px 4px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.1); }
+    .rank-card:hover .rank-card-icon { transform: scale(1.15) rotate(-5deg); }
+    .stat-badge { background: linear-gradient(135deg, rgba(34,197,94,0.2), rgba(34,197,94,0.05)); border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; padding: 2px 10px; font-size: 0.7rem; color: #4ade80; }
+
+    /* ===== تحسينات الجوال ===== */
+    @media (max-width: 640px) {
+      html { font-size: 14px; }
+      header { padding: 12px 14px !important; }
+      header .flex.items-center.gap-4 { gap: 10px !important; }
+      .w-16.h-16 { width: 44px !important; height: 44px !important; min-width: 44px; border-radius: 12px !important; }
+      nav > div { padding: 8px !important; gap: 6px !important; flex-wrap: nowrap; overflow-x: auto; }
+      nav button { padding: 8px 12px !important; font-size: 0.8rem !important; }
+      main { padding: 8px !important; }
+      .rank-card-icon { width: 40px !important; height: 40px !important; min-width: 40px !important; font-size: 1.1rem !important; }
+      .question-counter { width: 34px !important; height: 34px !important; min-width: 34px !important; font-size: 0.8rem !important; }
+      .glass-card.rounded-2xl { border-radius: 14px !important; }
+      .p-6 { padding: 14px !important; }
+      .p-5 { padding: 12px !important; }
+      .p-4 { padding: 10px !important; }
+      .gap-4 { gap: 10px !important; }
+      .text-xl { font-size: 1rem !important; }
+      .text-lg { font-size: 0.95rem !important; }
+      .flex-wrap.gap-3 { gap: 8px !important; }
+      #progress-bar-container { width: 140px !important; }
+      .grid-cols-1.sm\:grid-cols-2 { grid-template-columns: 1fr !important; }
+    }
+
+    @media (max-width: 400px) {
+      html { font-size: 13px; }
+      header h1[id='app-title'] { font-size: 1.1rem !important; }
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="overflow-x-hidden">
+  <div class="min-h-screen w-full flex flex-col">
+   <header class="py-5 px-6 relative" id="main-header" style="background: linear-gradient(135deg, #dde1ff, #ede9fe, #f0f4ff); border-bottom: 3px solid #6366f1; position: sticky; top: 0; z-index: 50; box-shadow: 0 4px 20px rgba(99,102,241,0.15);">
+    
+    
+    <div class="max-w-5xl mx-auto flex items-center justify-between relative z-10">
+     <div class="flex items-center gap-4">
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center float-icon" style="background: rgba(99,102,241,0.15); box-shadow: 0 8px 24px rgba(99,102,241,0.3); border: 2px solid rgba(99,102,241,0.4); overflow: hidden;">
+       <img src="https://c.top4top.io/p_3779618yv1.png" alt="أيقونة التطبيق" style="width: 48px; height: 48px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
+      </div>
+      <div>
+       <h1 id="app-title" style="font-size: 2rem; font-weight: 900; color: #000000; margin: 0;">محاكي الاختبارات المهنية</h1>
+       <p style="font-size: 1rem; color: #1a1a1a; margin-top: 4px; font-weight: 600;">✨ من إعداد الأستاذ حميدي البشير</p>
+       <p style="font-size: 0.85rem; color: #374151;">اختبارات تربوية وتشريعية - 2026</p>
+      </div>
+     </div>
+     <div style="background: rgba(99,102,241,0.15); border: 2px solid rgba(99,102,241,0.5); border-radius: 16px; padding: 10px 20px; text-align: center; animation: glow 3s ease-in-out infinite;">
+      <div style="font-size: 0.85rem; color: #374151; font-weight: 600;">الموسم</div>
+      <div style="font-size: 1rem; font-weight: 800; color: #000000;">2026</div>
+     </div>
+    </div>
+   </header>
+   <nav class="glass-card sticky top-0 z-10" style="border-bottom: 2px solid rgba(99,102,241,0.3);">
+    <div class="max-w-5xl mx-auto flex gap-2 p-3">
+     <button onclick="switchTab('ranks')" id="tab-ranks" class="tab-active px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-2 btn-3d"> <span style="font-size:1.2rem;">📚</span> الرتب 2026 </button> <button onclick="switchTab('exam')" id="tab-exam" class="px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap text-slate-300 hover:bg-white/10 transition-all flex items-center gap-2 btn-3d"> <span style="font-size:1.2rem;">📝</span> الاختبار </button>
+    </div>
+   </nav>
+   <main class="flex-1 max-w-5xl mx-auto w-full p-4">
+    <section id="section-ranks" class="fade-in">
+     <div class="glass-card rounded-2xl p-6 mb-4">
+      <div class="flex items-center gap-3 mb-4">
+       <span class="icon-3d pulse-3d">🎯</span>
+       <div>
+        <h2 class="font-bold text-xl text-white">الرتب المفتوحة للترقية - 2026</h2>
+        <p class="text-sm text-slate-400">اختر الرتبة التي تستهدفها للحصول على أسئلة تحضيرية متخصصة</p>
+       </div>
+      </div>
+      <div id="ranks-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+     </div>
+    </section>
+    <section id="section-exam" class="fade-in hidden">
+     <div class="glass-card rounded-2xl p-6">
+      <div id="exam-header" class="text-center mb-6 hidden">
+       <h2 id="exam-title" class="font-bold text-lg text-white mb-2"></h2>
+       <div class="flex items-center justify-center gap-4">
+        <div class="text-sm text-slate-400" id="question-info"></div>
+        <div class="w-64 h-2 bg-white/10 rounded-full overflow-hidden" id="progress-bar-container">
+         <div id="progress-bar" class="progress-bar h-2" style="width: 0%;"></div>
+        </div>
+       </div>
+      </div>
+      <div id="exam-type-selector" class="text-center mb-6 hidden">
+       <h2 class="font-bold text-lg text-slate-800 mb-4" id="type-selector-title"></h2>
+       <p class="text-sm text-slate-600 mb-4">اختر نمط الاختبار المفضل</p>
+       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+        <button onclick="selectExamType('multiple_choice')" class="p-4 border-2 border-indigo-200 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition text-right btn-3d" style="background: linear-gradient(135deg, rgba(34,197,94,0.05), rgba(220,38,38,0.05)); border-color: #6366f1;">
+         <div class="font-bold text-slate-800">
+          📋 اختيار من متعدد
+         </div>
+         <div class="text-xs text-slate-600 mt-1">
+          اختر الإجابة الصحيحة من بين الخيارات
+         </div></button> <button onclick="selectExamType('true_false')" class="p-4 border-2 border-indigo-200 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition text-right btn-3d" style="background: linear-gradient(135deg, rgba(34,197,94,0.05), rgba(220,38,38,0.05)); border-color: #6366f1;">
+         <div class="font-bold text-slate-800">
+          ✓✗ صح أم خطأ
+         </div>
+         <div class="text-xs text-slate-600 mt-1">
+          حدد ما إذا كانت الجملة صحيحة أم خاطئة
+         </div></button> <button onclick="selectExamType('fill_blank')" class="p-4 border-2 border-indigo-200 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition text-right btn-3d" style="background: linear-gradient(135deg, rgba(34,197,94,0.05), rgba(220,38,38,0.05)); border-color: #6366f1;">
+         <div class="font-bold text-slate-800">
+          📝 إكمال الفراغات
+         </div>
+         <div class="text-xs text-slate-600 mt-1">
+          أكمل الجملة بالكلمة أو العبارة الصحيحة
+         </div></button> <button onclick="selectExamType('matching')" class="p-4 border-2 border-indigo-200 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition text-right btn-3d" style="background: linear-gradient(135deg, rgba(34,197,94,0.05), rgba(220,38,38,0.05)); border-color: #6366f1;">
+         <div class="font-bold text-slate-800">
+          🔗 الربط/المطابقة
+         </div>
+         <div class="text-xs text-slate-600 mt-1">
+          اربط بين العناصر والمعاني الصحيحة
+         </div></button>
+       </div><button onclick="switchTab('ranks')" class="mt-4 px-4 py-2 text-slate-600 hover:text-slate-800 font-semibold flex items-center gap-1 mx-auto"><i data-lucide="arrow-right" class="w-4 h-4"></i> عودة</button>
+      </div>
+      <div id="question-selector" class="text-center mb-6 hidden">
+       <h2 class="font-bold text-lg text-slate-800 mb-4" id="selector-title"></h2>
+       <p class="text-sm text-slate-600 mb-4">اختر عدد الأسئلة التي تريد الإجابة عليها</p>
+       <div class="flex flex-wrap gap-3 justify-center"><button onclick="startExamWithCount(5)" class="px-6 py-3 bg-indigo-500 text-white rounded-lg font-semibold hover:bg-indigo-600 transition btn-3d" style="box-shadow: 0 6px 0 rgba(0,0,0,0.25);">5 أسئلة</button> <button onclick="startExamWithCount(10)" class="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition btn-3d" style="box-shadow: 0 6px 0 rgba(0,0,0,0.25);">10 أسئلة</button> <button onclick="startExamWithCount(15)" class="px-6 py-3 bg-violet-500 text-white rounded-lg font-semibold hover:bg-violet-600 transition btn-3d" style="box-shadow: 0 6px 0 rgba(0,0,0,0.25);">15 سؤال</button> <button onclick="startExamWithCount(20)" class="px-6 py-3 bg-violet-600 text-white rounded-lg font-semibold hover:bg-violet-700 transition btn-3d" style="box-shadow: 0 6px 0 rgba(0,0,0,0.25);">20 سؤال</button>
+       </div><button onclick="backToTypeSelection()" class="mt-4 px-4 py-2 text-slate-600 hover:text-slate-800 font-semibold flex items-center gap-1 mx-auto"><i data-lucide="arrow-right" class="w-4 h-4"></i> عودة</button>
+      </div>
+      <div id="exam-questions" class="space-y-4"></div>
+      <div id="exam-score" class="hidden mt-6 p-5 bg-gradient-to-l from-[#4f46e5] to-[#3730a3] text-white rounded-xl text-center" style="box-shadow: 0 8px 24px rgba(79,70,229,0.4);">
+       <p class="text-3xl font-bold mb-2" id="final-score"></p>
+       <p class="text-sm mb-4" id="score-message"></p><button onclick="switchTab('ranks')" class="px-6 py-2 bg-white text-indigo-600 rounded-lg font-bold hover:bg-slate-100 transition btn-3d">عودة لاختيار رتبة أخرى</button>
+      </div>
+     </div>
+    </section>
+   </main>
+  </div>
+  <script>
+const ranks2025 = {
+  regulations: [
+    { name: "القوانين والمراسيم الأساسية" },
+    { name: "قوانين الحماية الاجتماعية" },
+    { name: "قوانين النقابات والعمل" }
+  ],
+  teaching_primary: [
+    { name: "أستاذ التعليم الابتدائي" },
+    { name: "أستاذ التعليم الابتدائي قسم أول" },
+    { name: "أستاذ التعليم الابتدائي قسم ثان" },
+    { name: "أستاذ التعليم الابتدائي مميز" }
+  ],
+  teaching_middle: [
+    { name: "أستاذ التعليم المتوسط" },
+    { name: "أستاذ التعليم المتوسط قسم أول" },
+    { name: "أستاذ التعليم المتوسط قسم ثان" },
+    { name: "أستاذ التعليم المتوسط مميز" }
+  ],
+  teaching_secondary: [
+    { name: "أستاذ التعليم الثانوي" },
+    { name: "أستاذ التعليم الثانوي قسم أول" },
+    { name: "أستاذ التعليم الثانوي قسم ثان" },
+    { name: "أستاذ التعليم الثانوي مميز" }
+  ],
+  principals: [
+    { name: "ناظر في التعليم الابتدائي" },
+    { name: "ناظر في التعليم المتوسط" },
+    { name: "ناظر في التعليم الثانوي" }
+  ],
+  education_counselors: [
+    { name: "مستشار التربية" }
+  ],
+  education_assistants: [
+    { name: "مساعد التربية" },
+    { name: "مساعد رئيسي للتربية" }
+  ],
+  education_supervisors: [
+    { name: "مشرف التربية" },
+    { name: "مشرف رئيسي للتربية" },
+    { name: "مشرف رئيس للتربية" },
+    { name: "مشرف عام للتربية" }
+  ],
+  specialized_educators: [
+    { name: "مربي متخصص في الدعم التربوي" },
+    { name: "مربي متخصص رئيسي في الدعم التربوي" },
+    { name: "مربي متخصص رئيس في الدعم التربوي" },
+    { name: "مربي متخصص عام في الدعم التربوي" }
+  ],
+  guidance: [
+    { name: "مستشار التوجيه والإرشاد المدرسي والمهني" },
+    { name: "مستشار محلل للتوجيه والإرشاد المدرسي والمهني" },
+    { name: "مستشار رئيسي للتوجيه والإرشاد المدرسي والمهني" },
+    { name: "مستشار رئيس للتوجيه والإرشاد المدرسي والمهني" }
+  ],
+  labs: [
+    { name: "عون تقني للمخابر" },
+    { name: "معاون تقني للمخابر" },
+    { name: "ملحق بالمخابر" },
+    { name: "ملحق رئيسي بالمخابر" },
+    { name: "ملحق رئيس بالمخابر" },
+    { name: "ملحق مشرف بالمخابر" }
+  ],
+  nutrition: [
+    { name: "مستشار التغذية المدرسية" },
+    { name: "مستشار رئيسي في التغذية المدرسية" },
+    { name: "مستشار رئيس في التغذية المدرسية" }
+  ],
+  economic_assistants: [
+    { name: "مساعد المصالح الاقتصادية" },
+    { name: "مساعد رئيسي للمصالح الاقتصادية" }
+  ],
+  deputy_comptrollers: [
+    { name: "نائب مقتصد" },
+    { name: "نائب مقتصد مسير" }
+  ],
+  comptrollers: [
+    { name: "مقتصد" },
+    { name: "مقتصد رئيسي" }
+  ],
+  primary_schools_directors: [
+    { name: "مدير المدرسة الابتدائية" }
+  ],
+  middle_schools_directors: [
+    { name: "مدير المدرسة المتوسطة" }
+  ],
+  high_schools_directors: [
+    { name: "مدير المدرسة الثانوية" }
+  ],
+  primary_inspectors: [
+    { name: "مفتش التعليم الابتدائي تخصص المواد" },
+    { name: "مفتش التعليم الابتدائي تخصص إدارة" },
+    { name: "مفتش التعليم الابتدائي تخصص التغذية المدرسية" }
+  ],
+  middle_inspectors: [
+    { name: "مفتش التعليم المتوسط تخصص المواد" },
+    { name: "مفتش التعليم المتوسط تخصص إدارة" },
+    { name: "مفتش التوجيه والإرشاد المدرسي والمهني في المتوسطات" },
+    { name: "مفتش التسيير المالي والمادي في المتوسطات" }
+  ],
+  secondary_inspectors: [
+    { name: "مفتش التعليم الثانوي تخصص المواد" },
+    { name: "مفتش التعليم الثانوي تخصص إدارة" },
+    { name: "مفتش التوجيه والإرشاد المدرسي والمهني في الثانويات" },
+    { name: "مفتش التسيير المالي والمادي في الثانويات" }
+  ],
+  education_inspectors: [
+    { name: "مفتش التربية الوطنية" }
+  ],
+  ict: [
+    { name: "تكنولوجيا الإعلام والاتصال في التعليم" }
+  ],
+  education_sciences: [
+    { name: "علوم التربية والبيداغوجيا" }
+  ]
+};
+
+const mcqBank = {
+  regulations: {
+    multiple_choice: [
+      { q: "ما هو المرسوم 07-304 المتعلق به بشكل أساسي؟", options: ["التعليم الابتدائي", "الشبكة الاستدلالية لمرتبات الموظفين ونظام دفع رواتبهم", "الخريطة المدرسية", "الأمن المدرسي"], correct: 1, explanation: "المرسوم 07-304 يحدد الشبكة الاستدلالية لمرتبات الموظفين ونظام دفع رواتبهم (الصفحة 8)." },
+      { q: "المرسوم 10-315 هو تعديل وتتمة لأي مرسوم؟", options: ["المرسوم 12-240", "المرسوم 07-304", "المرسوم 14-266", "المرسوم 08-315"], correct: 1, explanation: "المرسوم 10-315 معدل ومتمم للمرسوم 07-304 (الصفحة 4)." },
+      { q: "المرسوم 12-194 يحدد كيفيات تنظيم ماذا؟", options: ["الحركة السنوية", "المسابقات والامتحانات والفحوص المهنية", "الحماية الاجتماعية", "العطل والتغيبات"], correct: 1, explanation: "المرسوم 12-194 يحدد كيفية تنظيم المسابقات والامتحانات والفحوص المهنية (الصفحة 10)." },
+      { q: "التعليمة رقم 1 للوظيفة العمومية توضح كيفيات تطبيق أي مرسوم؟", options: ["المرسوم 07-304", "المرسوم 12-194", "المرسوم 14-266", "المرسوم 10-315"], correct: 1, explanation: "التعليمة رقم 1 توضح كيفيات تطبيق المرسوم 194-12." },
+      { q: "القرار الوزاري المشترك يتعلق بـ ماذا؟", options: ["الحركة السنوية", "قائمة المؤهلات والشهادات المطلوبة للتوظيف والترقية", "النقابات العمالية", "الإضراب والتظاهر"], correct: 1, explanation: "القرار الوزاري المشترك يحدد قائمة المؤهلات والشهادات المطلوبة للتوظيف والترقية في الرتب الخاصة بالتربية الوطنية." },
+      { q: "المرسوم 88-131 ينظم العلاقات بين ماذا وماذا؟", options: ["الإدارة والموظف", "الإدارة والمواطن", "المدرسة والأسرة", "النقابة والإدارة"], correct: 1, explanation: "المرسوم 88-131 ينظم العلاقات بين الإدارة والمواطن." },
+      { q: "المرسوم 08-315 هو القانون الأساسي الخاص بموظفي أي قطاع؟", options: ["الصحة", "الأسلاك الخاصة بالتربية الوطنية", "العدل", "الدفاع"], correct: 1, explanation: "المرسوم 08-315 القانون الأساسي الخاص بالموظفين المنتمين للأسلاك الخاصة بالتربية الوطنية." },
+      { q: "المرسوم 12-240 يتعلق بـ ماذا؟", options: ["الخريطة المدرسية", "القانون الأساسي الخاص بموظفي الأسلاك الخاصة بالتربية الوطنية", "الأمن المدرسي", "النقل المدرسي"], correct: 1, explanation: "المرسوم 12-240 القانون الأساسي الخاص بالموظفين المنتمين للأسلاك الخاصة بالتربية الوطنية (الصفحة 15)." },
+      { q: "المرسوم 17-162 يتعلق بـ ماذا؟", options: ["المدرسة الابتدائية", "المتوسطة", "القانون الأساسي النموذجي للثانوية", "الخريطة المدرسية"], correct: 2, explanation: "المرسوم 17-162 المؤرخ في 15 مايو 2017 يحدد القانون الأساسي النموذجي للثانوية." },
+      { q: "المرسوم التنفيذي 16-227 يحدد القانون الأساسي النموذجي لـ ماذا؟", options: ["المدرسة الابتدائية", "المتوسطة", "الثانوية", "المكتبة الوطنية"], correct: 1, explanation: "المرسوم التنفيذي 16-227 يحدد القانون الأساسي النموذجي للمتوسطة." },
+      { q: "ما هو المرسوم التنفيذي 10-03 المتعلق به؟", options: ["الترقية والتوظيف", "شروط الدخول إلى مؤسسات التربية والتعليم واستعمالها وحمايتها", "الحركة السنوية", "نظام الرواتب"], correct: 1, explanation: "المرسوم التنفيذي 10-03 يحدد شروط الدخول إلى مؤسسات التربية والتعليم واستعمالها وحمايتها." },
+      { q: "المرسوم 10-04 يتعلق بـ ماذا؟", options: ["الأمن المدرسي", "كيفيات إعداد الخريطة المدرسية وتنفيذها ومراقبتها", "النقل المدرسي", "الإضراب"], correct: 1, explanation: "المرسوم 10-04 يحدد لكيفيات إعداد الخريطة المدرسية وتنفيذها ومراقبتها." },
+      { q: "المرسوم التنفيذي 84-296 يتعلق بـ ماذا؟", options: ["الترقية", "مهام التدريس والتكوين باعتبارهما عملاً ثانوياً", "الخريطة المدرسية", "النقابات"], correct: 1, explanation: "المرسوم التنفيذي 84-296 المتعلق بمهام التدريس والتكوين باعتبارهما عملاً ثانوياً." },
+      { q: "المنشور 05-96 يتعلق بـ ماذا؟", options: ["الترقية", "الحركة السنوية للموظفين", "الأمن المدرسي", "النقابات"], correct: 1, explanation: "منشور الإطار 05-96 المتعلق بالحركة السنوية للموظفين." },
+      { q: "قانون 14-06 يتعلق بـ ماذا؟", options: ["الضمان الاجتماعي", "الخدمة الوطنية", "التأمينات الاجتماعية", "حوادث العمل"], correct: 1, explanation: "قانون 14-06 المتعلق بالخدمة الوطنية." },
+      { q: "قانون 83-11 يتعلق بـ ماذا؟", options: ["التقاعد", "التأمينات الاجتماعية", "حوادث العمل", "الخدمة الوطنية"], correct: 1, explanation: "قانون 83-11 مُعدَّل ومُتمَّم يتعلق بالتأمينات الاجتماعية." },
+      { q: "قانون 83-12 يتعلق بـ ماذا؟", options: ["الضمان الاجتماعي", "التقاعد", "الخدمة الوطنية", "حوادث العمل"], correct: 1, explanation: "قانون 83-12 يتعلق بالتقاعد." },
+      { q: "قانون 83-13 المُعدَّل والمُتمَّم يتعلق بـ ماذا؟", options: ["التقاعد", "حوادث العمل والأمراض المهنية", "الضمان الاجتماعي", "الخدمة الوطنية"], correct: 1, explanation: "قانون 83-13 مُعدَّل ومُتمَّم يتعلق بحوادث العمل والأمراض المهنية." },
+      { q: "قانون 88-07 يتعلق بـ ماذا؟", options: ["الضمان الاجتماعي", "الوقاية الصحية والأمن وطب العمل", "التقاعد", "الخدمة الوطنية"], correct: 1, explanation: "قانون 88-07 يتعلق بالوقاية الصحية والأمن وطب العمل." },
+      { q: "المرسوم 20-199 يتعلق بـ ماذا؟", options: ["الترقية", "اللجنة الإدارية المتساوية الأعضاء", "الخريطة المدرسية", "الحركة السنوية"], correct: 1, explanation: "المرسوم 20-199 الخاص باللجنة الإدارية المتساوية الأعضاء." },
+      { q: "قانون 90-14 يتعلق بـ ماذا؟", options: ["الترقية", "ممارسة الحق النقابي", "الضمان الاجتماعي", "التقاعد"], correct: 1, explanation: "قانون 90-14 يتعلق بممارسة الحق النقابي." },
+      { q: "قانون 90-02 يتعلق بـ ماذا؟", options: ["النقابات", "الوقاية من النزاعات الجماعية والإضراب", "الترقية", "الضمان الاجتماعي"], correct: 1, explanation: "قانون 90-02 المتعلق بالوقاية من النزاعات الجماعية والإضراب." },
+      { q: "قانون 82-06 يتعلق بـ ماذا؟", options: ["الترقية", "علاقات العمل الفردية", "النقابات", "الخدمة الوطنية"], correct: 1, explanation: "قانون 82-06 يتعلق بعلاقات العمل الفردية." }
+    ],
+    true_false: [
+      { q: "المرسوم 07-304 يحدد الشبكة الاستدلالية لمرتبات الموظفين", correct: true, explanation: "هذا صحيح تماماً - المرسوم 07-304 يتناول هذا الموضوع بالصفحة 8." },
+      { q: "المرسوم 12-194 يتعلق بالخريطة المدرسية", correct: false, explanation: "خطأ - المرسوم 12-194 يحدد تنظيم المسابقات والامتحانات والفحوص المهنية، أما الخريطة المدرسية فتتعلق بالمرسوم 10-04." },
+      { q: "قانون 83-11 يتعلق بالتأمينات الاجتماعية", correct: true, explanation: "صحيح - قانون 83-11 مُعدَّل ومُتمَّم يتعلق بالتأمينات الاجتماعية." },
+      { q: "المرسوم 17-162 يحدد القانون الأساسي للمتوسطة", correct: false, explanation: "خطأ - المرسوم 17-162 يحدد القانون الأساسي النموذجي للثانوية، أما المتوسطة فتحددها المرسوم 16-227." },
+      { q: "قانون 90-14 يتعلق بممارسة الحق النقابي", correct: true, explanation: "صحيح تماماً - هذا هو محتوى القانون." },
+      { q: "المرسوم 10-03 يتعلق بالترقية والتوظيف", correct: false, explanation: "خطأ - المرسوم 10-03 يحدد شروط الدخول إلى مؤسسات التربية واستعمالها وحمايتها." },
+      { q: "المرسوم 84-296 يتعلق بمهام التدريس كعمل ثانوي", correct: true, explanation: "صحيح - المرسوم التنفيذي 84-296 يتعلق بهذا الموضوع." }
+    ],
+    fill_blank: [
+      { q: "المرسوم _____ يحدد الشبكة الاستدلالية لمرتبات الموظفين", correct_answer: "07-304", explanation: "هذا هو المرسوم المختص بتحديد الشبكة الاستدلالية." },
+      { q: "المرسوم _____ يحدد كيفيات تنظيم المسابقات والامتحانات", correct_answer: "12-194", explanation: "المرسوم 12-194 هو المرسوم المتعلق بهذا." },
+      { q: "المرسوم _____ يحدد القانون الأساسي النموذجي للثانوية", correct_answer: "17-162", explanation: "المرسوم 17-162 المؤرخ في 15 مايو 2017." },
+      { q: "المرسوم _____ يحدد القانون الأساسي النموذجي للمتوسطة", correct_answer: "16-227", explanation: "المرسوم التنفيذي 16-227." },
+      { q: "قانون _____ يتعلق بالتأمينات الاجتماعية", correct_answer: "83-11", explanation: "قانون 83-11 مُعدَّل ومُتمَّم." },
+      { q: "قانون _____ يتعلق بالتقاعد", correct_answer: "83-12", explanation: "قانون 83-12 هو القانون المتعلق بالتقاعد." }
+    ],
+    matching: [
+      { q: "ابط بين المرسوم والموضوع الذي يتعلق به", pairs: [
+        { left: "المرسوم 07-304", right: "الشبكة الاستدلالية لمرتبات الموظفين" },
+        { left: "المرسوم 12-194", right: "تنظيم المسابقات والامتحانات" },
+        { left: "المرسوم 10-04", right: "الخريطة المدرسية" }
+      ], explanation: "هذه المراسيم لها اختصاصات مختلفة محددة." }
+    ]
+  },
+  principals: {
+    multiple_choice: [
+      { q: "ما هي المهام الرئيسية للناظر حسب المرسوم 25-54؟", options: ["التدريس فقط", "الإدارة التربوية والإدارية والمالية للمؤسسة", "النقل المدرسي", "الحسابات"], correct: 1, explanation: "الناظر مسؤول عن تسيير المؤسسة من جميع الجوانب: التربوية والإدارية والمالية." },
+      { q: "كم مرة يجتمع مجلس التربية والتسيير في السنة على الأقل؟", options: ["مرة واحدة", "مرتان", "ثلاث مرات", "أربع مرات"], correct: 2, explanation: "مجلس التربية والتسيير يجتمع ثلاث مرات على الأقل في السنة الدراسية." },
+      { q: "من يترأس مجلس القسم؟", options: ["مدير المدرسة", "أستاذ القسم", "الناظر والأستاذ المسؤول", "مستشار التوجيه"], correct: 2, explanation: "يترأس مجلس القسم الناظر أو الأستاذ المسؤول عن القسم." },
+      { q: "ما المقصود بالمشروع المؤسساتي؟", options: ["خطة تدريس سنوية", "خطة عمل شاملة لمدة 3 سنوات", "قائمة الموظفين", "الميزانية"], correct: 1, explanation: "المشروع المؤسساتي وثيقة استراتيجية تحدد أهداف المؤسسة لمدة 3 سنوات." },
+      { q: "حسب التشريعات، من يختار الناظر؟", options: ["الأساتذة", "الوصاية التربوية", "الموظفون", "أولياء الأمور"], correct: 1, explanation: "يتم اختيار الناظر من قبل الجهات الوصية على التربية بناءً على معايير محددة." }
+    ],
+    true_false: [
+      { q: "يمكن للناظر أن يقرر إجازة مدرسية بدون استشارة الوصاية", correct: false, explanation: "الناظر لا يمكنه اتخاذ قرارات تتعلق بالإجازات والعطل دون موافقة الجهات الوصية." },
+      { q: "المشروع المؤسساتي يشمل جميع أركان العملية التعليمية", correct: true, explanation: "المشروع المؤسساتي شامل ويغطي البيداغوجيا والإدارة والمالية." }
+    ],
+    fill_blank: [
+      { q: "الناظر مسؤول عن إدارة ____ المؤسسة بشكل متكامل", correct_answer: "شؤون", explanation: "الناظر يدير كل شؤون المؤسسة من الناحية الإدارية والتربوية والمالية." },
+      { q: "المشروع المؤسساتي يحدد ____ المؤسسة وأهدافها", correct_answer: "رسالة", explanation: "المشروع يعكس رسالة المؤسسة وغاياتها الاستراتيجية." }
+    ],
+    matching: [
+      { q: "ابط بين المجلس والمهام", pairs: [
+        { left: "مجلس التربية والتسيير", right: "اتخاذ القرارات الإدارية والتربوية" },
+        { left: "مجلس القسم", right: "تقييم أداء التلاميذ" },
+        { left: "الجمعية العامة", right: "إطلاع أولياء الأمور والمجتمع المحلي" }
+      ], explanation: "كل مجلس له صلاحيات ومهام محددة في المؤسسة." }
+    ]
+  },
+  education_counselors: {
+    multiple_choice: [
+      { q: "ما دور مستشار التربية في المؤسسة؟", options: ["التدريس", "الإشراف التربوي والتنشئة التربوية", "الحسابات المالية", "النقل"], correct: 1, explanation: "مستشار التربية يساهم في الإشراف التربوي والعمل على تربية التلاميذ." },
+      { q: "هل مستشار التربية نفس الدور كمساعد التربية؟", options: ["نعم متطابق", "لا - مستشار له اختصاصات تربوية أعمق", "لا - فقط الفرق الراتب", "يعتمد على المدرسة"], correct: 1, explanation: "مستشار التربية له مستوى تربوي أعلى من مساعد التربية." },
+      { q: "ما المؤهل المطلوب لمستشار التربية؟", options: ["شهادة ثانوية", "شهادة جامعية في التربية أو المجالات ذات الصلة", "دبلوم تقني", "أي شهادة"], correct: 1, explanation: "مستشار التربية يجب أن يكون حاصلاً على شهادة جامعية في التخصصات التربوية." }
+    ],
+    true_false: [
+      { q: "مستشار التربية يساهم في تطوير الحياة المدرسية", correct: true, explanation: "من أهم مهام مستشار التربية الإسهام في جعل الحياة المدرسية سليمة وجاذبة." },
+      { q: "مستشار التربية له دور فقط تأديبي", correct: false, explanation: "دور مستشار التربية ليس فقط تأديبياً بل تربوياً وإشرافياً بالأساس." }
+    ],
+    fill_blank: [
+      { q: "مستشار التربية يساهم في بناء ____ تربوية صحية", correct_answer: "بيئة", explanation: "البيئة التربوية الصحية أساس النجاح التعليمي." },
+      { q: "مستشار التربية يعمل على ____ التلاميذ وليس فقط معاقبتهم", correct_answer: "تربية", explanation: "الجانب التربوي هو المحور الرئيسي لعمل مستشار التربية." }
+    ],
+    matching: [
+      { q: "ابط بين الصفة والمهمة", pairs: [
+        { left: "الإشراف التربوي", right: "المتابعة المستمرة لالتزام التلاميذ" },
+        { left: "التنشئة التربوية", right: "بناء قيم ومبادئ إيجابية" },
+        { left: "الرعاية الصحية", right: "النظافة والصحة المدرسية" }
+      ], explanation: "مهام متعددة ومتكاملة لمستشار التربية." }
+    ]
+  },
+  teaching_primary: {
+    multiple_choice: [
+      { q: "حسب المرسوم التنفيذي 25-54، ما هي متطلبات الترقية لأستاذ التعليم الابتدائي؟", options: ["الخبرة فقط", "الشهادة الجامعية + 3 سنوات خبرة + نجاح في الاختبار المهني", "الأقدمية فقط", "توصية من المدير"], correct: 1, explanation: "الترقية تتطلب جمع عوامل متعددة: الشهادة والخبرة والنجاح في الامتحان المهني." },
+      { q: "ما الهدف الأساسي من التقييم التشخيصي في بداية السنة الدراسية؟", options: ["توزيع الدرجات", "تحديد المكتسبات القبلية والثغرات في التعلم السابق", "معاقبة الضعفاء", "لا يوجد هدف محدد"], correct: 1, explanation: "التقييم التشخيصي يساعد في فهم نقطة انطلاق التعلم وتكييف التدريس." },
+      { q: "كيف تطبق البيداغوجيا الفارقية مع تلاميذ متفاوتي المستوى؟", options: ["بنفس الطريقة لكل التلاميذ", "بمسارات ونشاطات متنوعة لتحقيق نفس الأهداف", "بتركيز على المتفوقين فقط", "بإهمال المتأخرين"], correct: 1, explanation: "البيداغوجيا الفارقية تكفل حق جميع التلاميذ في التعلم بطرق تناسبهم." },
+    ],
+    true_false: [
+      { q: "المقاربة بالكفاءات تركز على حفظ المعلومات بدلاً من تطبيقها", correct: false, explanation: "المقاربة بالكفاءات توظف المعلومات في وضعيات حقيقية، وليس الحفظ الآلي." },
+      { q: "التقييم المستمر يشمل الملاحظة والاختبارات والأنشطة", correct: true, explanation: "التقييم المستمر متعدد الأدوات ويتابع التعلم في جميع الأشكال." },
+      { q: "يجب على الأستاذ تحديث مهاراته بانتظام", correct: true, explanation: "التطور المهني المستمر ضرورة قانونية وأخلاقية في المهنة." },
+    ],
+    fill_blank: [
+      { q: "التقييم ____ يساعد في فهم نقطة انطلاق التعلم", correct_answer: "التشخيصي", explanation: "التقييم التشخيصي يحدد المكتسبات السابقة والثغرات." },
+      { q: "المقاربة بـ ____ توظف المعلومات في وضعيات حقيقية", correct_answer: "الكفاءات", explanation: "المقاربة بالكفاءات هي الأساس في المناهج الحديثة." },
+      { q: "البيداغوجيا ____ توفر مسارات متنوعة للتلاميذ", correct_answer: "الفارقية", explanation: "تراعي الفروق الفردية والإمكانيات المختلفة." },
+    ],
+    matching: [
+      { q: "ابط بين المصطلحات والمعاني", pairs: [
+        { left: "التقييم التكويني", right: "الملاحظة المستمرة لتحسين التعلم" },
+        { left: "التقييم النهائي", right: "تقييم الكفاءات بنهاية المرحلة" },
+        { left: "التقييم التشخيصي", right: "تحديد المكتسبات القبلية" }
+      ], explanation: "هذه أنواع التقييم الرئيسية في العملية التعليمية." }
+    ]
+  },
+  teaching_middle: {
+    multiple_choice: [
+      { q: "حسب المرسوم التنفيذي 25-54، ما مدة الترقية من أستاذ متوسط إلى قسم 1؟", options: ["سنة واحدة", "سنتان", "3 سنوات على الأقل", "لا توجد مدة محددة"], correct: 2, explanation: "المرسوم الجديد يحدد مدة زمنية للترقية من درجة إلى أخرى بما لا يقل عن 3 سنوات." },
+      { q: "ما دور مجلس القسم حسب التشريعات الحالية 2025؟", options: ["الإدارة المالية فقط", "متابعة نتائج التلاميذ والتوجيه والتوصيات التربوية", "تأديب التلاميذ فقط", "تنظيم الرحلات"], correct: 1, explanation: "مجلس القسم يجتمع دورياً لمراجعة مسارات التلاميذ وتقديم التوجيهات المناسبة." },
+    ],
+    true_false: [
+      { q: "يمكن للمفتش حضور درس الأستاذ دون إشعاره مسبقاً", correct: true, explanation: "الزيارات المفاجئة من حقوق المفتش لتقييم الأداء الحقيقي للأستاذ." },
+      { q: "الأقدمية وحدها تضمن الترقية", correct: false, explanation: "الترقية تتطلب معايير موضوعية متعددة وليس الأقدمية فقط." },
+    ],
+    fill_blank: [
+      { q: "مجلس القسم يقوم بـ ____ متابعة نتائج التلاميذ", correct_answer: "دورية", explanation: "المتابعة الدورية ضرورية لتقييم التقدم التعليمي." },
+      { q: "المرسوم 25-54 يحدد معايير ____ واضحة للترقية", correct_answer: "موضوعية", explanation: "المعايير الموضوعية تضمن العدل والشفافية." },
+    ],
+    matching: [
+      { q: "ابط بين أنواع الاجتماعات والأهداف", pairs: [
+        { left: "مجلس القسم", right: "تقييم الأداء التعليمي للتلاميذ" },
+        { left: "مجلس التربية والتسيير", right: "اتخاذ قرارات إدارية وتربوية" },
+        { left: "الجمعية العامة", right: "إطلاع أولياء الأمور على الأوضاع" }
+      ], explanation: "كل اجتماع له أهداف وأدوار محددة." }
+    ]
+  },
+  teaching_secondary: {
+    multiple_choice: [
+      { q: "ما المقصود بـ 'المشروع المؤسساتي' حسب التشريعات الحالية 2025؟", options: ["خطة تدريس المادة فقط", "خطة عمل شاملة لـ 3 سنوات تحدد أهداف المؤسسة والمشاريع التنموية", "لائحة الأساتذة", "الميزانية السنوية"], correct: 1, explanation: "المشروع المؤسساتي وثيقة استراتيجية تعكس رؤية المؤسسة ورسالتها." },
+    ],
+    true_false: [
+      { q: "التكوين أثناء الخدمة حق وليس التزام على الأستاذ", correct: false, explanation: "التكوين حق قانوني للموظف وواجب على المؤسسة توفيره بانتظام." },
+    ],
+    fill_blank: [
+      { q: "المشروع المؤسساتي يعكس ____ المؤسسة التعليمية", correct_answer: "رؤية", explanation: "الرؤية هي الإطار العام لعمل المؤسسة." },
+    ],
+    matching: [
+      { q: "ابط بين المستندات والمحتوى", pairs: [
+        { left: "المشروع المؤسساتي", right: "الأهداف الاستراتيجية للمؤسسة" },
+        { left: "البرنامج السنوي", right: "الأنشطة المخطط لها لسنة واحدة" },
+        { left: "ملف الإنجاز", right: "توثيق العمل والنجاحات" }
+      ], explanation: "مستندات مهمة في إدارة المؤسسة التعليمية." }
+    ]
+  },
+  inspection: {
+    multiple_choice: [
+      { q: "حسب المرسوم 25-54، ما هي المهام الرئيسية للمفتش التربوي؟", options: ["جمع الرسوم المدرسية", "الإشراف البيداغوجي والتقويم والتكوين والرفع المهني", "تأديب التلاميذ", "الإدارة المالية"], correct: 1, explanation: "المفتش مسؤول عن تطوير الممارسات البيداغوجية وتحسين جودة التعليم." },
+    ],
+    true_false: [
+      { q: "يجب على المفتش تبليغ الأستاذ بنتائج تقييمه", correct: true, explanation: "الشفافية أساسية: يجب إطلاع الأستاذ على نتائج التقييم ونقاط القوة والضعف." },
+    ],
+    fill_blank: [
+      { q: "المفتش يقوم بـ ____ الأساتذة في تطويرهم المهني", correct_answer: "تكوين", explanation: "التكوين والتطوير من أهم مهام المفتش." },
+    ],
+    matching: [
+      { q: "ابط بين مهام المفتش والوسائل", pairs: [
+        { left: "الإشراف البيداغوجي", right: "الزيارات الميدانية والملاحظة" },
+        { left: "التكوين", right: "الندوات والورش والتدريبات" },
+        { left: "التقويم", right: "شبكات الملاحظة وملفات الإنجاز" }
+      ], explanation: "المفتش يستخدم أدوات متنوعة في عمله." }
+    ]
+  },
+  education_assistants: {
+    multiple_choice: [
+      { q: "ما هو دور مساعد التربية حسب المرسوم 25-54؟", options: ["تدريس المواد", "الإشراف على التلاميذ وتنظيم الحياة المدرسية والتربية", "الحسابات المالية", "التنظيف"], correct: 1, explanation: "مساعد التربية يضطلع بمهام الإشراف والنظام والتوجيه التربوي للتلاميذ." },
+    ],
+    true_false: [
+      { q: "مساعد التربية يمكنه تطبيق عقوبات من الدرجة الثانية", correct: true, explanation: "مساعدو التربية مخولون بتطبيق عقوبات من الدرجة الأولى والثانية." },
+    ],
+    fill_blank: [
+      { q: "مساعد التربية يساهم في بناء ____ آمنة وسلمية", correct_answer: "بيئة", explanation: "البيئة الآمنة أساس التعليم الفعال." },
+    ],
+    matching: [
+      { q: "ابط بين المهام والمسؤوليات", pairs: [
+        { left: "الإشراف", right: "متابعة التلاميذ والنظام" },
+        { left: "التوجيه التربوي", right: "الاستماع والحوار مع التلاميذ" },
+        { left: "تنظيم الحياة المدرسية", right: "تنسيق الأنشطة والفعاليات" }
+      ], explanation: "مسؤوليات مساعد التربية متنوعة وأساسية." }
+    ]
+  },
+  guidance: {
+    multiple_choice: [
+      { q: "ما هو الهدف الرئيسي لخدمات التوجيه حسب القانون التوجيهي 2025؟", options: ["فقط إجراء الاختبارات", "توجيه التلاميذ نحو مسارات تعليمية ومهنية مناسبة", "تسيير الملفات", "الإداريات فقط"], correct: 1, explanation: "التوجيه عملية تربوية تساعد المتعلم على اختيار مساره بوعي وحرية." },
+    ],
+    true_false: [
+      { q: "التوجيه يبدأ من السنة الثالثة متوسط فقط", correct: false, explanation: "التوجيه عملية مستمرة تبدأ من السنة الأولى وتتطور حسب كل مرحلة." },
+    ],
+    fill_blank: [
+      { q: "مستشار التوجيه يساعد الطالب في اختيار ____ مناسب", correct_answer: "مسار", explanation: "اختيار المسار أساس التوجيه التربوي." },
+    ],
+    matching: [
+      { q: "ابط بين أنواع التوجيه والأهداف", pairs: [
+        { left: "التوجيه الأكاديمي", right: "اختيار المسار التعليمي" },
+        { left: "التوجيه المهني", right: "اختيار التخصص والمهنة" },
+        { left: "التوجيه الشخصي", right: "التطور النفسي والاجتماعي" }
+      ], explanation: "التوجيه يشمل جوانب متعددة من حياة المتعلم." }
+    ]
+  },
+  ict: {
+    multiple_choice: [
+      { q: "ما المقصود بتكنولوجيا الإعلام والاتصال في التعليم (TICE)؟", options: ["استخدام الحاسوب فقط", "توظيف الأدوات الرقمية والتقنية لتحسين العملية التعليمية", "مشاهدة الفيديوهات", "طباعة الوثائق"], correct: 1, explanation: "TICE تعني توظيف كل الأدوات الرقمية والتكنولوجية لخدمة العملية التعليمية التعلمية." },
+      { q: "أي مما يلي يُعد من مزايا استخدام تكنولوجيا الاتصال في التعليم؟", options: ["زيادة الأعباء على المعلم", "تعزيز التفاعل والتعلم الذاتي والتعلم التعاوني", "إلغاء دور المعلم", "تقليل فرص التعلم"], correct: 1, explanation: "تكنولوجيا الاتصال تعزز التفاعل وتدعم التعلم الذاتي والتعاوني بين المتعلمين." },
+      { q: "ما هو نظام إدارة التعلم (LMS)؟", options: ["برنامج محاسبة", "منصة رقمية لإدارة المحتوى التعليمي والتفاعل مع المتعلمين", "شبكة اجتماعية", "نظام تشغيل"], correct: 1, explanation: "LMS مثل Moodle هي منصات لإدارة المقررات والتفاعل التعليمي عن بعد." },
+      { q: "ما هو التعلم المدمج (Blended Learning)؟", options: ["التعلم الحضوري فقط", "التعلم عن بعد فقط", "الجمع بين التعلم الحضوري والتعلم عن بعد", "التعلم بالمراسلة"], correct: 2, explanation: "التعلم المدمج يجمع بين الحضوري والرقمي للاستفادة من مزايا كل منهما." },
+      { q: "ما المقصود بالفصل المقلوب (Classe Inversée)؟", options: ["تغيير ترتيب الطاولات", "يدرس التلميذ الدرس في البيت ويطبق في القسم", "إلغاء الواجبات المنزلية", "تبادل الأدوار بين المعلم والتلميذ"], correct: 1, explanation: "في الفصل المقلوب يشاهد التلميذ الدرس في المنزل (فيديو/مستند) ويخصص وقت القسم للتطبيق والنقاش." },
+      { q: "أي من البرامج التالية يُستخدم لإنشاء عروض تقديمية تعليمية؟", options: ["Excel", "PowerPoint", "Access", "Notepad"], correct: 1, explanation: "PowerPoint من أشهر برامج إنشاء العروض التقديمية التعليمية." },
+      { q: "ما هي الحوسبة السحابية (Cloud Computing) في السياق التعليمي؟", options: ["تخزين الملفات في الحاسوب المحلي فقط", "خدمات تخزين ومعالجة البيانات عبر الإنترنت يمكن الوصول إليها من أي مكان", "شبكة محلية داخل المدرسة", "حماية البيانات"], correct: 1, explanation: "الحوسبة السحابية تتيح التخزين والوصول للملفات من أي جهاز متصل بالإنترنت مثل Google Drive." },
+      { q: "ما هو الهدف من إدماج تكنولوجيا الاتصال في المناهج الدراسية الجزائرية؟", options: ["استبدال المعلم", "تحديث طرق التدريس وتحسين جودة التعلم", "تقليل ساعات الدراسة", "إلغاء الكتب المدرسية"], correct: 1, explanation: "الهدف هو تحديث الممارسات البيداغوجية وتحسين جودة التعليم وليس استبدال المعلم." },
+      { q: "ما هو البريد الإلكتروني المهني وما أهميته للمعلم؟", options: ["بريد شخصي للتسلية", "وسيلة تواصل رسمية مع الإدارة والزملاء وأولياء الأمور", "حساب على فيسبوك", "رقم هاتف"], correct: 1, explanation: "البريد الإلكتروني المهني أداة أساسية للتواصل الرسمي في البيئة التعليمية." },
+      { q: "ما المقصود بالموارد التعليمية المفتوحة (OER)؟", options: ["كتب مدفوعة", "موارد تعليمية متاحة مجاناً للاستخدام والتعديل والمشاركة", "برامج محمية بحقوق النشر", "مواقع ترفيهية"], correct: 1, explanation: "OER هي موارد تعليمية مفتوحة المصدر يمكن استخدامها وتكييفها بحرية." },
+      { q: "ما هي أهمية الأمن الرقمي للمعلم؟", options: ["غير مهم", "حماية البيانات الشخصية وبيانات التلاميذ من الاختراق", "فقط لحماية الحاسوب من الفيروسات", "منع التلاميذ من استخدام الإنترنت"], correct: 1, explanation: "الأمن الرقمي يشمل حماية جميع البيانات الشخصية والمهنية وبيانات التلاميذ." },
+      { q: "ما هو دور السبورة التفاعلية في التعليم؟", options: ["زينة في القسم", "أداة تفاعلية لعرض المحتوى والتفاعل المباشر مع الدروس", "بديل عن السبورة العادية فقط", "أداة إدارية"], correct: 1, explanation: "السبورة التفاعلية تتيح عرض محتوى متعدد الوسائط والتفاعل المباشر." }
+    ],
+    true_false: [
+      { q: "تكنولوجيا الاتصال تُغني عن دور المعلم في العملية التعليمية", correct: false, explanation: "خطأ - التكنولوجيا أداة مساعدة للمعلم وليست بديلاً عنه. المعلم يبقى محور العملية التعليمية." },
+      { q: "التعلم عن بعد يمكن أن يكون متزامناً أو غير متزامن", correct: true, explanation: "صحيح - المتزامن يكون في وقت حقيقي (فيديو مباشر) وغير المتزامن يكون عبر موارد مسجلة." },
+      { q: "الفصل المقلوب يعني أن التلميذ يدرس المحتوى في المنزل ويطبق في القسم", correct: true, explanation: "صحيح - هذا هو المبدأ الأساسي للفصل المقلوب." },
+      { q: "استخدام الإنترنت في التعليم لا يتطلب أي ضوابط أخلاقية", correct: false, explanation: "خطأ - يجب احترام الخصوصية وحقوق الملكية الفكرية وحماية التلاميذ من المحتوى غير المناسب." },
+      { q: "منصة Moodle هي نظام إدارة تعلم مفتوح المصدر", correct: true, explanation: "صحيح - Moodle منصة LMS مفتوحة المصدر تُستخدم على نطاق واسع في التعليم." },
+      { q: "الحوسبة السحابية تتيح الوصول للملفات من أي مكان", correct: true, explanation: "صحيح - هذه من أهم مميزات الحوسبة السحابية." },
+      { q: "البودكاست التعليمي يُعد من أدوات التعلم غير المتزامن", correct: true, explanation: "صحيح - البودكاست يمكن الاستماع إليه في أي وقت يناسب المتعلم." }
+    ],
+    fill_blank: [
+      { q: "_____ هو نظام لإدارة التعلم عبر الإنترنت مفتوح المصدر", correct_answer: "Moodle", explanation: "Moodle من أشهر أنظمة إدارة التعلم المفتوحة المصدر." },
+      { q: "التعلم _____ يجمع بين التعلم الحضوري والتعلم عن بعد", correct_answer: "المدمج", explanation: "التعلم المدمج (Blended Learning) يوازن بين الطريقتين." },
+      { q: "الفصل _____ يعكس ترتيب التعلم التقليدي", correct_answer: "المقلوب", explanation: "الفصل المقلوب (Classe Inversée) يجعل الدرس في المنزل والتطبيق في القسم." },
+      { q: "_____ هي موارد تعليمية متاحة مجاناً للجميع", correct_answer: "OER", explanation: "Open Educational Resources - الموارد التعليمية المفتوحة." },
+      { q: "TICE تعني تكنولوجيا _____ والاتصال في التعليم", correct_answer: "الإعلام", explanation: "Technologies de l'Information et de la Communication pour l'Enseignement." },
+      { q: "_____ التفاعلية أداة عرض رقمية تسمح بالتفاعل المباشر", correct_answer: "السبورة", explanation: "السبورة التفاعلية تجمع بين العرض والتفاعل الرقمي." }
+    ],
+    matching: [
+      { q: "اربط بين المصطلح والتعريف", pairs: [
+        { left: "LMS", right: "نظام إدارة التعلم" },
+        { left: "TICE", right: "تكنولوجيا الاتصال في التعليم" },
+        { left: "OER", right: "الموارد التعليمية المفتوحة" }
+      ], explanation: "مصطلحات أساسية في تكنولوجيا التعليم." },
+      { q: "اربط بين الأداة والاستخدام", pairs: [
+        { left: "السبورة التفاعلية", right: "عرض تفاعلي للدروس" },
+        { left: "Google Drive", right: "تخزين سحابي ومشاركة ملفات" },
+        { left: "Moodle", right: "إدارة المقررات عن بعد" }
+      ], explanation: "كل أداة لها استخدام محدد في البيئة التعليمية الرقمية." }
+    ]
+  },
+  education_sciences: {
+    multiple_choice: [
+      { q: "ما المقصود بالمقاربة بالكفاءات؟", options: ["حفظ المعلومات واسترجاعها", "بناء معارف ومهارات قابلة للتوظيف في وضعيات حقيقية", "التلقين المباشر", "الاعتماد على الكتاب المدرسي فقط"], correct: 1, explanation: "المقاربة بالكفاءات تركز على توظيف المعارف في حل مشكلات واقعية وليس مجرد الحفظ." },
+      { q: "ما الفرق بين البيداغوجيا والديداكتيك؟", options: ["لا فرق بينهما", "البيداغوجيا تهتم بطرق التدريس عموماً والديداكتيك بتعليمية المادة", "الديداكتيك أقدم من البيداغوجيا", "البيداغوجيا خاصة بالجامعة"], correct: 1, explanation: "البيداغوجيا علم التربية العام أما الديداكتيك فيهتم بتعليمية مادة محددة." },
+      { q: "ما هي الوضعية المشكلة في المقاربة بالكفاءات؟", options: ["سؤال بسيط", "وضعية حقيقية تتطلب تجنيد موارد متعددة لحلها", "تمرين تطبيقي عادي", "اختبار كتابي"], correct: 1, explanation: "الوضعية المشكلة وضعية ذات دلالة تتطلب من المتعلم تجنيد معارفه ومهاراته لحلها." },
+      { q: "ما المقصود بالتقويم التكويني؟", options: ["تقويم نهاية السنة", "تقويم مستمر أثناء التعلم لتعديل المسار", "امتحان القبول", "تقويم إداري"], correct: 1, explanation: "التقويم التكويني يرافق العملية التعليمية لتحديد الصعوبات وتعديل الممارسات." },
+      { q: "من هو صاحب نظرية النمو المعرفي عند الطفل؟", options: ["سكينر", "بياجيه", "بلوم", "فيغوتسكي"], correct: 1, explanation: "جان بياجيه هو صاحب نظرية النمو المعرفي التي حددت مراحل النمو العقلي." },
+      { q: "ما هي منطقة النمو القريبة (ZPD) عند فيغوتسكي؟", options: ["المنطقة الجغرافية للمدرسة", "الفجوة بين ما يستطيع المتعلم فعله وحده وما يستطيعه بمساعدة", "مستوى الذكاء", "المنهاج الدراسي"], correct: 1, explanation: "ZPD هي المسافة بين مستوى التعلم الفعلي ومستوى التعلم الممكن بمساعدة الراشد أو الأقران." },
+      { q: "ما هي مستويات تصنيف بلوم للأهداف المعرفية (المُعدّل)؟", options: ["القراءة والكتابة والحساب", "التذكر - الفهم - التطبيق - التحليل - التقويم - الإبداع", "المعرفة والمهارة فقط", "السهل والمتوسط والصعب"], correct: 1, explanation: "تصنيف بلوم المعدل يتدرج من التذكر إلى الإبداع كأعلى مستوى." },
+      { q: "ما المقصود بالبيداغوجيا الفارقية؟", options: ["تدريس متطابق لجميع التلاميذ", "تكييف التعليم حسب الفروق الفردية للمتعلمين", "فصل التلاميذ حسب المستوى", "إلغاء الامتحانات"], correct: 1, explanation: "البيداغوجيا الفارقية تراعي اختلاف إيقاعات وأنماط تعلم التلاميذ." },
+      { q: "ما هو التعاقد البيداغوجي؟", options: ["عقد عمل المعلم", "اتفاق بين المعلم والمتعلم على أهداف وقواعد التعلم", "وثيقة إدارية", "برنامج دراسي"], correct: 1, explanation: "التعاقد البيداغوجي يحدد التزامات كل طرف في العملية التعليمية." },
+      { q: "ما المقصود بالعائق الإبستمولوجي؟", options: ["صعوبة مادية", "تصور خاطئ مسبق يعيق بناء المعرفة الجديدة", "مشكلة سلوكية", "نقص في الوسائل"], correct: 1, explanation: "العائق الإبستمولوجي هو معرفة سابقة خاطئة تمنع المتعلم من استيعاب المعرفة الصحيحة." },
+      { q: "ما هو دور المعلم في المقاربة البنائية؟", options: ["ملقّن للمعلومات", "وسيط ومنشط يوجه المتعلم لبناء معارفه بنفسه", "مراقب فقط", "لا دور له"], correct: 1, explanation: "في البنائية المعلم وسيط يهيئ الظروف للمتعلم ليبني معارفه بنفسه." },
+      { q: "ما المقصود بالوضعية الإدماجية؟", options: ["وضعية بسيطة", "وضعية تتطلب إدماج مجموعة من الموارد المكتسبة لحل مشكلة مركبة", "تمرين حسابي", "نشاط ترفيهي"], correct: 1, explanation: "الوضعية الإدماجية تسمح للمتعلم بتوظيف مختلف الموارد المكتسبة في سياق ذي دلالة." },
+      { q: "ما هي وظائف المناهج التربوية حسب القانون التوجيهي؟", options: ["التدريس فقط", "ترسيخ القيم والهوية، التعليم، التأهيل، والاندماج الاجتماعي", "الحفظ والتلقين", "التقويم فقط"], correct: 1, explanation: "المناهج التربوية تؤدي 4 وظائف: ترسيخ القيم والهوية، التعليم، التأهيل، والاندماج الاجتماعي." },
+      { q: "ما هي مبادئ التقويم التربوي الأساسية؟", options: ["السرعة والدقة فقط", "الشمول والتقنين والصدق والموضوعية والثبات", "الحفظ والاسترجاع", "العقاب والمكافأة"], correct: 1, explanation: "مبادئ التقويم: الشمول (كل الجوانب)، التقنين (قواعد علمية)، الصدق (الأمانة)، الموضوعية (التجرد)، الثبات (الاتساق)." },
+      { q: "ما هي مرحلة بداية الفعل في الوضعية التعلمية؟", options: ["الامتحان النهائي", "عمل التلاميذ في مجموعات حول وضعية مشكلة وتحليلها وبناء فرضيات", "إلقاء الدرس من طرف الأستاذ", "كتابة الملخص"], correct: 1, explanation: "مرحلة بداية الفعل: يعمل التلاميذ في مجموعات حول وضعية مشكلة، يحللونها ويبنون فرضيات حل." },
+      { q: "ما هي أشكال التقويم التربوي؟", options: ["الامتحان النهائي فقط", "الفحوص التشخيصية والاستجوابات والعروض والأعمال التطبيقية والفروض", "الملاحظة فقط", "الحفظ فقط"], correct: 1, explanation: "أشكال التقويم متعددة: فحوص تشخيصية، استجوابات شفوية وكتابية، عروض، أعمال تطبيقية، فروض منزلية ومحروسة." },
+      { q: "من مميزات التنظيم البيداغوجي الجديد في الجزائر؟", options: ["المركزية والجمود", "هيكلة جديدة، التفتح على اللغات، نهج يراعي مراحل نمو الطفل، اللامركزية", "الحفظ والتلقين فقط", "إلغاء التقويم"], correct: 1, explanation: "التنظيم الجديد يتميز بالهيكلة الجديدة والتفتح والنهج البيداغوجي المراعي لنمو الطفل واللامركزية." },
+      { q: "ما هي أسس مراجعة المناهج الدراسية في الجزائر؟", options: ["أسس مالية فقط", "أسس فلسفية ونفسية واجتماعية ومعرفية ومنهجية", "أسس إدارية فقط", "لا توجد أسس محددة"], correct: 1, explanation: "أسس المراجعة: فلسفية (فلسفة المجتمع)، نفسية (حاجات المتعلم)، اجتماعية، معرفية (مبادئ التدرج والتكامل)، منهجية." },
+      { q: "ما هي وظيفة كتاب التلميذ حسب المنهاج؟", options: ["زينة في المحفظة", "التحفيز للإعداد القبلي وإبراز مؤهلات التلميذ وتوفير فرص التفاعل مع المادة", "الحفظ فقط", "لا فائدة منه"], correct: 1, explanation: "كتاب التلميذ يحفز للإعداد القبلي ويبرز مؤهلات التلميذ ويوفر فرص تفاعل مع المادة عبر البحث والاكتشاف." },
+      { q: "ما المقصود بمبدأ الصدق في التقويم التربوي؟", options: ["سرعة التصحيح", "الالتزام بالأمانة وتوفير معلومات تبين درجة التحكم في الكفاءات المستهدفة", "عدد الأسئلة", "شكل الورقة"], correct: 1, explanation: "الصدق يعني الالتزام بالأمانة بما هو موثق من معلومات تبين درجة التحكم في الكفاءات قصد التدخل البيداغوجي." }
+    ],
+    true_false: [
+      { q: "المقاربة بالكفاءات تعتمد على التلقين المباشر للمعلومات", correct: false, explanation: "خطأ - المقاربة بالكفاءات تعتمد على بناء المعرفة من خلال وضعيات مشكلة وليس التلقين." },
+      { q: "التقويم التشخيصي يُجرى في بداية التعلم لتحديد المكتسبات القبلية", correct: true, explanation: "صحيح - التقويم التشخيصي يحدد نقطة انطلاق التعلم ويكشف الثغرات." },
+      { q: "بياجيه يرى أن التعلم يتم عبر التفاعل الاجتماعي أولاً", correct: false, explanation: "خطأ - هذا رأي فيغوتسكي. بياجيه يركز على التفاعل مع المحيط المادي والنضج البيولوجي." },
+      { q: "البيداغوجيا الفارقية تعني تدريس نفس المحتوى بنفس الطريقة لجميع التلاميذ", correct: false, explanation: "خطأ - البيداغوجيا الفارقية تعني تنويع الطرق والوسائل حسب الفروق الفردية." },
+      { q: "تصنيف بلوم المعدّل يضع الإبداع في أعلى مستويات التفكير", correct: true, explanation: "صحيح - الإبداع هو أعلى مستوى في هرم بلوم المعدّل." },
+      { q: "الوضعية المشكلة يجب أن تكون ذات دلالة بالنسبة للمتعلم", correct: true, explanation: "صحيح - الدلالة والسياق الواقعي شرطان أساسيان للوضعية المشكلة." },
+      { q: "النظرية السلوكية ترى أن التعلم هو تغير في السلوك الملاحظ", correct: true, explanation: "صحيح - السلوكية تركز على السلوك القابل للملاحظة والقياس." },
+      { q: "مبدأ الشمول في التقويم يعني أن التقويم يمس كل الجوانب المراد تقويمها", correct: true, explanation: "صحيح - الشمول يعني أن التقويم يمس كل الجوانب المراد تقويمها ويحيط بها." },
+      { q: "الموضوعية في التقويم تعني التجرد من الأحكام الذاتية", correct: true, explanation: "صحيح - الموضوعية تعني التجرد من الأحكام الذاتية وأن تكون الملاحظات ذات مدلول نوعي." },
+      { q: "وظائف المناهج التربوية تشمل التعليم فقط دون ترسيخ القيم", correct: false, explanation: "خطأ - المناهج تؤدي 4 وظائف: ترسيخ القيم والهوية، التعليم، التأهيل، والاندماج الاجتماعي." },
+      { q: "أسس مراجعة المناهج تشمل الأسس الفلسفية والنفسية والاجتماعية", correct: true, explanation: "صحيح - بالإضافة إلى الأسس المعرفية والمنهجية." }
+    ],
+    fill_blank: [
+      { q: "المقاربة بـ _____ تركز على توظيف المعارف في وضعيات حقيقية", correct_answer: "الكفاءات", explanation: "المقاربة بالكفاءات هي الإطار المنهجي المعتمد في المناهج الجزائرية." },
+      { q: "_____ هو صاحب نظرية النمو المعرفي ومراحل التطور العقلي", correct_answer: "بياجيه", explanation: "جان بياجيه عالم نفس سويسري وضع نظرية النمو المعرفي." },
+      { q: "منطقة النمو _____ مفهوم طوّره فيغوتسكي", correct_answer: "القريبة", explanation: "Zone of Proximal Development - ZPD." },
+      { q: "التقويم _____ يرافق التعلم ويساعد في تعديل المسار", correct_answer: "التكويني", explanation: "التقويم التكويني أداة تنظيمية أثناء سيرورة التعلم." },
+      { q: "تصنيف _____ يحدد مستويات الأهداف المعرفية من التذكر إلى الإبداع", correct_answer: "بلوم", explanation: "تصنيف بنجامين بلوم من أشهر التصنيفات التربوية." },
+      { q: "البيداغوجيا _____ تراعي الفروق الفردية بين المتعلمين", correct_answer: "الفارقية", explanation: "Pédagogie différenciée - تكييف التعليم حسب كل متعلم." },
+      { q: "مبدأ _____ في التقويم يعني أن التقويم يمس كل الجوانب المراد تقويمها", correct_answer: "الشمول", explanation: "الشمول من أهم مبادئ التقويم التربوي." },
+      { q: "وظائف المناهج التربوية تشمل ترسيخ القيم والتعليم والتأهيل و_____", correct_answer: "الاندماج الاجتماعي", explanation: "الوظيفة الرابعة للمناهج هي الاندماج الاجتماعي." },
+      { q: "مبدأ _____ في التقويم يعني التجرد من الأحكام الذاتية", correct_answer: "الموضوعية", explanation: "الموضوعية شرط أساسي لضمان عدالة التقويم." }
+    ],
+    matching: [
+      { q: "اربط بين العالم والنظرية", pairs: [
+        { left: "بياجيه", right: "النظرية البنائية والنمو المعرفي" },
+        { left: "فيغوتسكي", right: "النظرية الاجتماعية البنائية" },
+        { left: "سكينر", right: "النظرية السلوكية والتعزيز" }
+      ], explanation: "كل عالم ساهم بنظرية مختلفة في فهم التعلم." },
+      { q: "اربط بين نوع التقويم ووظيفته", pairs: [
+        { left: "التقويم التشخيصي", right: "تحديد المكتسبات القبلية" },
+        { left: "التقويم التكويني", right: "تعديل مسار التعلم أثناءه" },
+        { left: "التقويم التحصيلي", right: "قياس درجة تحقق الكفاءات" }
+      ], explanation: "أنواع التقويم الثلاثة تتكامل في العملية التعليمية." }
+    ]
+  }
+};
+
+let currentQuiz = null;
+let score = 0;
+let answered = [];
+let currentRankName = '';
+let currentQuizType = '';
+let totalQuestions = 0;
+let currentExamType = 'multiple_choice';
+
+function initializeExamTypeSelector(rankName, quizType) {
+  currentRankName = rankName;
+  currentQuizType = quizType;
+  
+  document.getElementById('exam-type-selector').classList.remove('hidden');
+  document.getElementById('question-selector').classList.add('hidden');
+  document.getElementById('exam-header').classList.add('hidden');
+  document.getElementById('exam-questions').innerHTML = '';
+  document.getElementById('exam-score').classList.add('hidden');
+  document.getElementById('type-selector-title').textContent = `${rankName} - اختر نمط الاختبار`;
+  lucide.createIcons();
+}
+
+function selectExamType(type) {
+  currentExamType = type;
+  
+  document.getElementById('exam-type-selector').classList.add('hidden');
+  document.getElementById('question-selector').classList.remove('hidden');
+  document.getElementById('selector-title').textContent = `${currentRankName} - ${getExamPattern(type)}`;
+  lucide.createIcons();
+}
+
+function getExamPattern(type) {
+  const patterns = {
+    'multiple_choice': 'اختيار من متعدد',
+    'true_false': 'صح أم خطأ',
+    'fill_blank': 'إكمال الفراغات',
+    'matching': 'الربط/المطابقة'
+  };
+  return patterns[type] || 'اختبار';
+}
+
+function backToTypeSelection() {
+  document.getElementById('exam-type-selector').classList.remove('hidden');
+  document.getElementById('question-selector').classList.add('hidden');
+  lucide.createIcons();
+}
+
+function startExamWithCount(count) {
+  let rankData = mcqBank[currentQuizType];
+  
+  // Fallback: if no dedicated questions exist for this rank, use regulations questions
+  if (!rankData) {
+    rankData = mcqBank['regulations'];
+  }
+  
+  const questionsBank = (rankData && rankData[currentExamType]) || [];
+  
+  if (questionsBank.length === 0) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'p-4 bg-red-50 border border-red-300 rounded-lg text-red-700 text-center';
+    errorDiv.textContent = 'لا توجد أسئلة متاحة لهذا النمط حالياً. جرّب نمط اختبار آخر.';
+    document.getElementById('exam-questions').innerHTML = '';
+    document.getElementById('exam-questions').appendChild(errorDiv);
+    return;
+  }
+  
+  const shuffled = [...questionsBank].sort(() => Math.random() - 0.5);
+  currentQuiz = shuffled.slice(0, Math.min(count, questionsBank.length));
+  
+  totalQuestions = currentQuiz.length;
+  score = 0;
+  answered = new Array(totalQuestions).fill(false);
+  
+  document.getElementById('question-selector').classList.add('hidden');
+  document.getElementById('exam-header').classList.remove('hidden');
+  document.getElementById('exam-title').textContent = `اختبار: ${currentRankName} - ${getExamPattern(currentExamType)}`;
+  document.getElementById('question-info').textContent = `السؤال 1 من ${totalQuestions}`;
+  document.getElementById('exam-score').classList.add('hidden');
+  document.getElementById('progress-bar').style.width = '0%';
+  
+  renderExamQuestions();
+}
+
+function renderExamQuestions() {
+  const container = document.getElementById('exam-questions');
+  let html = '';
+  
+  if (currentExamType === 'multiple_choice') {
+    currentQuiz.forEach((q, qi) => {
+      const isAnswered = answered[qi];
+      let questionHTML = `<div class="bg-slate-50 rounded-xl p-5 border-2 border-slate-200 fade-in" id="q-${qi}">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="question-counter">${qi + 1}</div>
+          <p class="font-bold text-slate-800">${q.q}</p>
+        </div>
+        <div class="space-y-2">`;
+      
+      q.options.forEach((opt, oi) => {
+        questionHTML += `<button onclick="checkAnswerMultipleChoice(${qi},${oi})" id="opt-${qi}-${oi}" class="w-full text-right p-3 border-2 border-slate-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-all text-sm option-btn" ${isAnswered ? 'disabled' : ''}>
+          <span class="font-semibold text-[#818cf8] ml-2">${['أ','ب','ج','د','هـ','و'][oi] || (oi+1)}.</span> ${opt}
+        </button>`;
+      });
+      
+      questionHTML += `</div><div id="feedback-${qi}" class="mt-3 hidden"></div></div>`;
+      html += questionHTML;
+    });
+  } else if (currentExamType === 'true_false') {
+    currentQuiz.forEach((q, qi) => {
+      const isAnswered = answered[qi];
+      let questionHTML = `<div class="bg-slate-50 rounded-xl p-5 border-2 border-slate-200 fade-in" id="q-${qi}">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="question-counter">${qi + 1}</div>
+          <p class="font-bold text-slate-800">${q.q}</p>
+        </div>
+        <div class="flex gap-3">
+          <button onclick="checkAnswerTrueFalse(${qi}, true)" id="opt-${qi}-0" class="flex-1 p-3 border-2 border-slate-300 bg-white rounded-lg hover:border-green-500 hover:bg-green-50 transition-all text-sm font-semibold option-btn" ${isAnswered ? 'disabled' : ''}>✓ صح</button>
+          <button onclick="checkAnswerTrueFalse(${qi}, false)" id="opt-${qi}-1" class="flex-1 p-3 border-2 border-slate-300 bg-white rounded-lg hover:border-red-500 hover:bg-red-50 transition-all text-sm font-semibold option-btn" ${isAnswered ? 'disabled' : ''}>✗ خطأ</button>
+        </div>
+        <div id="feedback-${qi}" class="mt-3 hidden"></div>
+      </div>`;
+      html += questionHTML;
+    });
+  } else if (currentExamType === 'fill_blank') {
+    currentQuiz.forEach((q, qi) => {
+      const isAnswered = answered[qi];
+      let questionHTML = `<div class="bg-slate-50 rounded-xl p-5 border-2 border-slate-200 fade-in" id="q-${qi}">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="question-counter">${qi + 1}</div>
+          <p class="font-bold text-slate-800">${q.q}</p>
+        </div>
+        <input type="text" id="answer-${qi}" class="w-full p-3 border-2 border-slate-300 rounded-lg text-right placeholder-shown:text-right" placeholder="اكتب الإجابة هنا..." ${isAnswered ? 'disabled' : ''}>
+        <button onclick="checkAnswerFillBlank(${qi})" id="submit-${qi}" class="w-full mt-3 p-3 bg-indigo-500 text-white rounded-lg font-semibold hover:bg-indigo-600 transition option-btn btn-3d" style="box-shadow: 0 4px 8px rgba(220,38,38,0.3);" ${isAnswered ? 'hidden' : ''}>تأكيد</button>
+        <div id="feedback-${qi}" class="mt-3 hidden"></div>
+      </div>`;
+      html += questionHTML;
+    });
+  } else if (currentExamType === 'matching') {
+    currentQuiz.forEach((q, qi) => {
+      const isAnswered = answered[qi];
+      let questionHTML = `<div class="bg-slate-50 rounded-xl p-5 border-2 border-slate-200 fade-in" id="q-${qi}">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="question-counter">${qi + 1}</div>
+          <p class="font-bold text-slate-800">${q.q}</p>
+        </div>
+        <div class="space-y-2">`;
+      
+      q.pairs.forEach((pair, pi) => {
+        questionHTML += `<div class="flex gap-2 items-center">
+          <div class="flex-1 p-3 bg-white border-2 border-slate-300 rounded-lg text-sm text-right font-semibold">${pair.left}</div>
+          <span class="text-xl text-slate-400">⟷</span>
+          <select id="match-${qi}-${pi}" class="flex-1 p-3 border-2 border-slate-300 rounded-lg text-right text-sm" ${isAnswered ? 'disabled' : ''}>
+            <option value="">اختر...</option>
+            ${q.pairs.map((p, i) => `<option value="${i}">${p.right}</option>`).join('')}
+          </select>
+        </div>`;
+      });
+      
+      questionHTML += `</div>
+        <button onclick="checkAnswerMatching(${qi})" id="submit-${qi}" class="w-full mt-3 p-3 bg-indigo-500 text-white rounded-lg font-semibold hover:bg-indigo-600 transition option-btn btn-3d" style="box-shadow: 0 4px 8px rgba(220,38,38,0.3);" ${isAnswered ? 'hidden' : ''}>تأكيد</button>
+        <div id="feedback-${qi}" class="mt-3 hidden"></div>
+      </div>`;
+      html += questionHTML;
+    });
+  }
+  
+  container.innerHTML = html;
+  lucide.createIcons();
+}
+
+function checkAnswerMultipleChoice(qi, oi) {
+  if (answered[qi]) return;
+  answered[qi] = true;
+  const q = currentQuiz[qi];
+  const isCorrect = oi === q.correct;
+  if (isCorrect) score++;
+  
+  updateProgress();
+  
+  q.options.forEach((_, i) => {
+    const btn = document.getElementById(`opt-${qi}-${i}`);
+    btn.disabled = true;
+    btn.classList.remove('hover:border-[#2d5a87]', 'hover:bg-slate-100');
+    if (i === q.correct) btn.className = 'w-full text-right p-3 border-2 rounded-lg text-sm correct-answer border-emerald-500 option-btn';
+    else if (i === oi && !isCorrect) btn.className = 'w-full text-right p-3 border-2 rounded-lg text-sm wrong-answer border-red-400 option-btn';
+  });
+  
+  showFeedback(qi, isCorrect, q.explanation);
+}
+
+function checkAnswerTrueFalse(qi, answer) {
+  if (answered[qi]) return;
+  answered[qi] = true;
+  const q = currentQuiz[qi];
+  const isCorrect = answer === q.correct;
+  if (isCorrect) score++;
+  
+  updateProgress();
+  
+  const btn1 = document.getElementById(`opt-${qi}-0`);
+  const btn2 = document.getElementById(`opt-${qi}-1`);
+  btn1.disabled = btn2.disabled = true;
+  
+  if (answer === true && q.correct === true) btn1.className = 'flex-1 p-3 border-2 border-emerald-500 bg-emerald-50 rounded-lg text-sm font-semibold correct-answer option-btn';
+  else if (answer === true) btn1.className = 'flex-1 p-3 border-2 border-red-400 bg-red-50 rounded-lg text-sm font-semibold wrong-answer option-btn';
+  
+  if (answer === false && q.correct === false) btn2.className = 'flex-1 p-3 border-2 border-emerald-500 bg-emerald-50 rounded-lg text-sm font-semibold correct-answer option-btn';
+  else if (answer === false) btn2.className = 'flex-1 p-3 border-2 border-red-400 bg-red-50 rounded-lg text-sm font-semibold wrong-answer option-btn';
+  
+  showFeedback(qi, isCorrect, q.explanation);
+}
+
+function checkAnswerFillBlank(qi) {
+  if (answered[qi]) return;
+  const q = currentQuiz[qi];
+  const userAnswer = document.getElementById(`answer-${qi}`).value.trim().normalize('NFC');
+  const correctAnswer = q.correct_answer.trim().normalize('NFC');
+  const isCorrect = userAnswer === correctAnswer || userAnswer.replace(/\s+/g,'') === correctAnswer.replace(/\s+/g,'');
+  
+  if (isCorrect) score++;
+  answered[qi] = true;
+  updateProgress();
+  
+  document.getElementById(`answer-${qi}`).disabled = true;
+  document.getElementById(`submit-${qi}`).hidden = true;
+  
+  showFeedback(qi, isCorrect, q.explanation);
+}
+
+function checkAnswerMatching(qi) {
+  if (answered[qi]) return;
+  const q = currentQuiz[qi];
+  let isCorrect = true;
+  
+  for (let i = 0; i < q.pairs.length; i++) {
+    const selected = document.getElementById(`match-${qi}-${i}`).value;
+    if (selected === '') isCorrect = false;
+    if (parseInt(selected) !== i) isCorrect = false;
+    document.getElementById(`match-${qi}-${i}`).disabled = true;
+  }
+  
+  if (isCorrect) score++;
+  answered[qi] = true;
+  updateProgress();
+  
+  document.getElementById(`submit-${qi}`).hidden = true;
+  
+  showFeedback(qi, isCorrect, q.explanation);
+}
+
+function updateProgress() {
+  const answeredCount = answered.filter(a => a).length;
+  const progress = (answeredCount / totalQuestions) * 100;
+  document.getElementById('progress-bar').style.width = progress + '%';
+  document.getElementById('question-info').textContent = `السؤال ${answeredCount} من ${totalQuestions}`;
+  
+  if (answered.every(a => a)) {
+    const scoreCard = document.getElementById('exam-score');
+    scoreCard.classList.remove('hidden');
+    const percentage = (score / totalQuestions) * 100;
+    document.getElementById('final-score').textContent = `${percentage.toFixed(0)}% - ${score} من ${totalQuestions}`;
+    
+    if (percentage >= 80) document.getElementById('score-message').textContent = '🎉 ممتاز! أداء استثنائي';
+    else if (percentage >= 60) document.getElementById('score-message').textContent = '👍 جيد جداً! استمر في التحضير';
+    else if (percentage >= 40) document.getElementById('score-message').textContent = '📚 جيد! راجع المواضيع الضعيفة';
+    else document.getElementById('score-message').textContent = '⚠️ تحتاج لمراجعة أكثر. شغل على المواد الأساسية';
+  }
+}
+
+function showFeedback(qi, isCorrect, explanation) {
+  const feedback = document.getElementById(`feedback-${qi}`);
+  feedback.classList.remove('hidden');
+  feedback.innerHTML = `<div class="p-3 rounded-lg ${isCorrect ? 'bg-emerald-50 border border-emerald-200' : 'bg-red-50 border border-red-200'}">
+    <p class="font-semibold text-sm ${isCorrect ? 'text-emerald-700' : 'text-red-700'}">${isCorrect ? '✓ إجابة صحيحة!' : '✗ إجابة خاطئة'}</p>
+    <p class="text-sm text-slate-600 mt-1">${explanation}</p>
+  </div>`;
+}
+
+function renderRanks() {
+  const container = document.getElementById('ranks-container');
+  let html = '';
+  
+  const rankLabels = {
+    regulations: '⚖️ القوانين والتشريعات',
+    teaching_primary: '👨‍🏫 أساتذة التعليم الابتدائي',
+    teaching_middle: '👨‍🏫 أساتذة التعليم المتوسط',
+    teaching_secondary: '👨‍🏫 أساتذة التعليم الثانوي',
+    principals: '🏫 سلك النظار',
+    education_counselors: '💼 مستشارو التربية',
+    education_assistants: '👥 مساعدو التربية',
+    education_supervisors: '📋 مشرفو التربية',
+    specialized_educators: '🎓 المربون المتخصصون في الدعم التربوي',
+    guidance: '🧭 مستشارو التوجيه والإرشاد',
+    labs: '⚗️ موظفو المخابر',
+    nutrition: '🍽️ موظفو التغذية المدرسية',
+    economic_assistants: '💼 مساعدو المصالح الاقتصادية',
+    deputy_comptrollers: '📊 نواب المقتصدين',
+    comptrollers: '💳 المقتصدون',
+    primary_schools_directors: '🏫 مديرو المدارس الابتدائية',
+    middle_schools_directors: '🏫 مديرو المدارس المتوسطة',
+    high_schools_directors: '🏫 مديرو المدارس الثانوية',
+    primary_inspectors: '🔍 مفتشو التعليم الابتدائي',
+    middle_inspectors: '🔍 مفتشو التعليم المتوسط',
+    secondary_inspectors: '🔍 مفتشو التعليم الثانوي',
+    education_inspectors: '🔍 مفتشو التربية الوطنية',
+    ict: '💻 تكنولوجيا الإعلام والاتصال',
+    education_sciences: '📖 علوم التربية والبيداغوجيا'
+  };
+
+  const rankIcons = {
+    regulations: '⚖️', teaching_primary: '👨‍🏫', teaching_middle: '🧑‍🏫', teaching_secondary: '👩‍🏫',
+    principals: '🏫', education_counselors: '💼', education_assistants: '👥', education_supervisors: '📋',
+    specialized_educators: '🎓', guidance: '🧭', labs: '⚗️', nutrition: '🍽️',
+    economic_assistants: '💰', deputy_comptrollers: '📊', comptrollers: '💳',
+    primary_schools_directors: '🏛️', middle_schools_directors: '🏢', high_schools_directors: '🏰',
+    primary_inspectors: '🔍', middle_inspectors: '🔎', secondary_inspectors: '🕵️',
+    education_inspectors: '🛡️', ict: '💻', education_sciences: '📖'
+  };
+  const rankColors = {
+    regulations: '#6366f1', teaching_primary: '#22c55e', teaching_middle: '#14b8a6', teaching_secondary: '#0ea5e9',
+    principals: '#f59e0b', education_counselors: '#8b5cf6', education_assistants: '#ec4899', education_supervisors: '#f97316',
+    specialized_educators: '#06b6d4', guidance: '#10b981', labs: '#a855f7', nutrition: '#ef4444',
+    economic_assistants: '#eab308', deputy_comptrollers: '#3b82f6', comptrollers: '#6366f1',
+    primary_schools_directors: '#f59e0b', middle_schools_directors: '#14b8a6', high_schools_directors: '#0ea5e9',
+    primary_inspectors: '#ef4444', middle_inspectors: '#f97316', secondary_inspectors: '#8b5cf6',
+    education_inspectors: '#dc2626', ict: '#3b82f6', education_sciences: '#22c55e'
+  };
+
+  for (const [key, label] of Object.entries(rankLabels)) {
+    const ranks = ranks2025[key];
+    const icon = rankIcons[key] || '📁';
+    const color = rankColors[key] || '#22c55e';
+    if (ranks) {
+      html += `<div class="card-hover rank-card glass-card rounded-2xl cursor-pointer p-4 flex items-center gap-3" style="border: 1px solid ${color}30;" onclick="expandRank('${key}')">
+        <div class="rank-card-icon" style="background: linear-gradient(135deg, ${color}40, ${color}15); border: 1px solid ${color}50;">
+          <span style="filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));">${icon}</span>
+        </div>
+        <div class="flex-1">
+          <div class="font-bold text-white text-sm">${label.replace(/^[^\s]+\s/, '')}</div>
+          <div class="mt-1"><span class="stat-badge" style="color:${color}; border-color:${color}50; background: ${color}15;">${ranks.length} رتبة</span></div>
+        </div>
+        <span style="color:${color}; font-size: 1.2rem;">←</span>
+      </div>`;
+    }
+  }
+  
+  container.innerHTML = html;
+}
+
+function expandRank(sector) {
+  const ranks = ranks2025[sector];
+  const container = document.getElementById('ranks-container');
+  
+  let html = `<div class="col-span-full glass-card p-3 rounded-xl mb-3">
+    <button onclick="renderRanks()" class="text-sm text-slate-300 hover:text-white font-semibold flex items-center gap-2"><span style="font-size:1.2rem;">→</span> عودة</button>
+  </div>
+  <div class="col-span-full glass-card rounded-2xl p-5">
+    <h3 class="font-bold text-lg text-white mb-3 flex items-center gap-2"><span style="font-size:1.5rem;">📋</span> الرتب المتاحة</h3>
+    <div class="space-y-2">`;
+  
+  ranks.forEach(r => {
+    html += `<button onclick="selectRank('${r.name}')" class="w-full text-right p-4 rounded-xl hover:scale-[1.02] transition-all text-sm font-medium text-white btn-3d flex items-center gap-3" style="background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(99,102,241,0.05)); border: 1px solid rgba(99,102,241,0.3); box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+      <span style="font-size:1.3rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">✅</span>
+      <span class="flex-1">${r.name}</span>
+      <span style="color: #818cf8;">←</span>
+    </button>`;
+  });
+  
+  html += `</div></div>`;
+  
+  container.innerHTML = html;
+  lucide.createIcons();
+}
+
+function selectRank(rankName) {
+  let quizType = 'teaching_primary';
+  
+  // First check more specific conditions before general ones
+  if (rankName.includes('مستشار التربية') && !rankName.includes('توجيه')) quizType = 'education_counselors';
+  else if (rankName.includes('ناظر')) quizType = 'principals';
+  else if (rankName.includes('مساعد التربية') || rankName.includes('مساعد رئيسي')) quizType = 'education_assistants';
+  else if (rankName.includes('توجيه') || rankName.includes('إرشاد')) quizType = 'guidance';
+  else if (rankName.includes('مشرف')) quizType = 'education_supervisors';
+  else if (rankName.includes('متخصص') || rankName.includes('مربي')) quizType = 'specialized_educators';
+  else if (rankName.includes('مخابر')) quizType = 'labs';
+  else if (rankName.includes('تغذية')) quizType = 'nutrition';
+  else if (rankName.includes('مصالح الاقتصادية')) quizType = 'economic_assistants';
+  else if (rankName.includes('نائب مقتصد')) quizType = 'deputy_comptrollers';
+  else if (rankName.includes('مقتصد')) quizType = 'comptrollers';
+  else if (rankName.includes('مدير المدرسة الابتدائية')) quizType = 'primary_schools_directors';
+  else if (rankName.includes('مدير المدرسة المتوسطة')) quizType = 'middle_schools_directors';
+  else if (rankName.includes('مدير المدرسة الثانوية')) quizType = 'high_schools_directors';
+  else if (rankName.includes('مفتش التعليم الابتدائي')) quizType = 'primary_inspectors';
+  else if (rankName.includes('مفتش التعليم المتوسط')) quizType = 'middle_inspectors';
+  else if (rankName.includes('مفتش التعليم الثانوي')) quizType = 'secondary_inspectors';
+  else if (rankName.includes('مفتش التربية')) quizType = 'education_inspectors';
+  else if (rankName.includes('تكنولوجيا')) quizType = 'ict';
+  else if (rankName.includes('علوم التربية') || rankName.includes('البيداغوجيا')) quizType = 'education_sciences';
+  else if (rankName.includes('ثانوي')) quizType = 'teaching_secondary';
+  else if (rankName.includes('متوسط')) quizType = 'teaching_middle';
+  
+  switchTab('exam');
+  initializeExamTypeSelector(rankName, quizType);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('[id^="section-"]').forEach(s => s.classList.add('hidden'));
+  document.querySelectorAll('[id^="tab-"]').forEach(t => { t.className = 'px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap text-slate-300 hover:bg-white/10 transition-all flex items-center gap-2 btn-3d'; });
+  document.getElementById('section-' + tab).classList.remove('hidden');
+  document.getElementById('tab-' + tab).className = 'tab-active px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-2 btn-3d';
+  if (tab === 'ranks') renderRanks();
+  lucide.createIcons();
+}
+
+const defaultConfig = {
+  app_title: 'محاكي الاختبارات المهنية',
+  selected_rank: 'اختر رتبتك',
+  exam_type: 'اختر نمط الاختبار'
+};
+
+try {
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (config) => {
+      document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+    },
+    mapToCapabilities: (config) => ({
+      recolorables: [],
+      borderables: [],
+      fontEditable: undefined,
+      fontSizeable: undefined
+    }),
+    mapToEditPanelValues: (config) => new Map([
+      ["app_title", config.app_title || defaultConfig.app_title]
+    ])
+  });
+} catch(e) {
+  console.warn('elementSdk غير متاح - التطبيق يعمل في الوضع المستقل', e);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderRanks();
+  lucide.createIcons();
+});
+  </script>
+</body>
+</html>
