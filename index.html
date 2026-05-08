@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
  <head>
   <meta charset="UTF-8">
@@ -8,7 +8,7 @@
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="/_sdk/element_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
   <style>
     html { font-size: 18px; }
     * { font-family: 'Cairo', sans-serif; box-sizing: border-box; }
@@ -25,6 +25,12 @@
     .float-icon { animation: float 3s ease-in-out infinite; }
     .pulse-3d { animation: pulse3d 2s ease-in-out infinite; display: inline-block; }
     .shimmer-text { background: linear-gradient(90deg, #22c55e, #dc2626, #22c55e, #dc2626, #22c55e); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 3s linear infinite; }
+    .title-gradient { background: linear-gradient(135deg, #b91c1c 0%, #dc2626 30%, #7f1d1d 60%, #991b1b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    @keyframes titleShimmer { 0% { background-position: -300% 0; } 100% { background-position: 300% 0; } }
+    .title-shimmer { background: linear-gradient(90deg, #7f1d1d, #dc2626, #f59e0b, #dc2626, #7f1d1d); background-size: 300% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: titleShimmer 4s linear infinite; font-family: 'Tajawal', 'Cairo', sans-serif; letter-spacing: -0.5px; }
+    .logo-container { position: relative; }
+    .logo-container::after { content: ''; position: absolute; inset: -4px; border-radius: 20px; background: linear-gradient(135deg, #dc2626, #22c55e, #dc2626); animation: rotateBorder 3s linear infinite; z-index: -1; opacity: 0.7; }
+    @keyframes rotateBorder { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .glass-card { background: rgba(255,255,255,0.06); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
     .icon-3d { font-size: 2.5rem; filter: drop-shadow(0 6px 10px rgba(0,0,0,0.4)); display: inline-block; transition: transform 0.3s ease; }
     .correct-answer { background: rgba(34,197,94,0.15); border-color: #22c55e; color: #22c55e; font-weight: bold; }
@@ -45,7 +51,10 @@
       html { font-size: 14px; }
       header { padding: 12px 14px !important; }
       header .flex.items-center.gap-4 { gap: 10px !important; }
+      .logo-container { width: 58px !important; height: 58px !important; min-width: 58px !important; border-radius: 14px !important; }
+      .logo-container img { width: 48px !important; height: 48px !important; }
       .w-16.h-16 { width: 44px !important; height: 44px !important; min-width: 44px; border-radius: 12px !important; }
+      #app-title { font-size: 1.25rem !important; }
       nav > div { padding: 8px !important; gap: 6px !important; flex-wrap: nowrap; overflow-x: auto; }
       nav button { padding: 8px 12px !important; font-size: 0.8rem !important; }
       main { padding: 8px !important; }
@@ -68,36 +77,31 @@
       header h1[id='app-title'] { font-size: 1.1rem !important; }
     }
   </style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
- <body class="overflow-x-hidden">
-  <div class="min-h-screen w-full flex flex-col">
-   <header class="py-5 px-6 relative" id="main-header" style="background: linear-gradient(135deg, #fef2f2, #dcfce7, #fff7ed); border-bottom: 3px solid #dc2626; position: sticky; top: 0; z-index: 50; box-shadow: 0 4px 20px rgba(220,38,38,0.2);">
-    
-    
-    <div class="max-w-5xl mx-auto flex items-center justify-between relative z-10">
-     <div class="flex items-center gap-4">
-      <div class="w-16 h-16 rounded-2xl flex items-center justify-center float-icon" style="background: rgba(220,38,38,0.12); box-shadow: 0 8px 24px rgba(220,38,38,0.25); border: 2px solid rgba(220,38,38,0.4); overflow: hidden;">
-       <img src="https://c.top4top.io/p_3779618yv1.png" alt="أيقونة التطبيق" style="width: 48px; height: 48px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
+ <body class="flex flex-col">
+  <header class="bg-black/20 backdrop-blur-md border-b border-white/10 p-4 sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="logo-container w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center">
+          <img src="https://c.top4top.io/p_3779618yv1.png" alt="Logo" class="w-10 h-10">
+        </div>
+        <h1 id="app-title" class="title-shimmer font-black text-2xl text-white">محاكي الاختبارات المهنية</h1>
       </div>
-      <div>
-       <h1 id="app-title" style="font-size: 2rem; font-weight: 900; color: #000000; margin: 0;">محاكي الاختبارات المهنية</h1>
-       <p style="font-size: 1rem; color: #1a1a1a; margin-top: 4px; font-weight: 600;">✨ من إعداد الأستاذ حميدي البشير</p>
-       <p style="font-size: 0.85rem; color: #374151;">اختبارات تربوية وتشريعية - 2026</p>
-      </div>
-     </div>
-     <div style="background: rgba(99,102,241,0.15); border: 2px solid rgba(99,102,241,0.5); border-radius: 16px; padding: 10px 20px; text-align: center; animation: glow 3s ease-in-out infinite;">
-      <div style="font-size: 0.85rem; color: #374151; font-weight: 600;">الموسم</div>
-      <div style="font-size: 1rem; font-weight: 800; color: #000000;">2026</div>
-     </div>
     </div>
-   </header>
-   <nav class="glass-card sticky top-0 z-10" style="border-bottom: 2px solid rgba(99,102,241,0.3);">
-    <div class="max-w-5xl mx-auto flex gap-2 p-3">
-     <button onclick="switchTab('ranks')" id="tab-ranks" class="tab-active px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-2 btn-3d"> <span style="font-size:1.2rem;">📚</span> الرتب 2026 </button> <button onclick="switchTab('exam')" id="tab-exam" class="px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap text-slate-300 hover:bg-white/10 transition-all flex items-center gap-2 btn-3d"> <span style="font-size:1.2rem;">📝</span> الاختبار </button>
+  </header>
+  
+  <nav class="bg-black/40 border-b border-white/5">
+    <div class="max-w-5xl mx-auto flex items-center gap-2 p-2 overflow-x-auto">
+      <button id="tab-ranks" onclick="switchTab('ranks')" class="tab-active px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-2 btn-3d">
+        <i data-lucide="list" class="w-4 h-4"></i> الرتب المتاحة
+      </button>
+      <button id="tab-exam" onclick="switchTab('exam')" class="px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap text-slate-300 hover:bg-white/10 transition-all flex items-center gap-2 btn-3d hidden">
+        <i data-lucide="edit-3" class="w-4 h-4"></i> الاختبار
+      </button>
     </div>
-   </nav>
-   <main class="flex-1 max-w-5xl mx-auto w-full p-4">
+  </nav>
+
+  <main class="flex-1 max-w-5xl mx-auto w-full p-4">
     <section id="section-ranks" class="fade-in">
      <div class="glass-card rounded-2xl p-6 mb-4">
       <div class="flex items-center gap-3 mb-4">
@@ -166,7 +170,6 @@
      </div>
     </section>
    </main>
-  </div>
   <script>
 const ranks2025 = {
   regulations: [
@@ -503,12 +506,12 @@ const mcqBank = {
     multiple_choice: [
       { q: "ما المقصود بتكنولوجيا الإعلام والاتصال في التعليم (TICE)؟", options: ["استخدام الحاسوب فقط", "توظيف الأدوات الرقمية والتقنية لتحسين العملية التعليمية", "مشاهدة الفيديوهات", "طباعة الوثائق"], correct: 1, explanation: "TICE تعني توظيف كل الأدوات الرقمية والتكنولوجية لخدمة العملية التعليمية التعلمية." },
       { q: "أي مما يلي يُعد من مزايا استخدام تكنولوجيا الاتصال في التعليم؟", options: ["زيادة الأعباء على المعلم", "تعزيز التفاعل والتعلم الذاتي والتعلم التعاوني", "إلغاء دور المعلم", "تقليل فرص التعلم"], correct: 1, explanation: "تكنولوجيا الاتصال تعزز التفاعل وتدعم التعلم الذاتي والتعاوني بين المتعلمين." },
-      { q: "ما هو نظام إدارة التعلم (LMS)؟", options: ["برنامج محاسبة", "منصة رقمية لإدارة المحتوى التعليمي والتفاعل مع المتعلمين", "شبكة اجتماعية", "نظام تشغيل"], correct: 1, explanation: "LMS مثل Moodle هي منصات لإدارة المقررات والتفاعل التعليمي عن بعد." },
+{ q: "ما هو نظام إدارة التعلم (LMS)؟", options: ["برنامج محاسبة", "منصة رقمية لإدارة المحتوى التعليمي والتفاعل مع المتعلمين", "شبكة اجتماعية", "نظام تشغيل"], correct: 1, explanation: "LMS مثل Moodle هي منصات لإدارة المقررات والتفاعل التعليمي عن بعد." },
       { q: "ما هو التعلم المدمج (Blended Learning)؟", options: ["التعلم الحضوري فقط", "التعلم عن بعد فقط", "الجمع بين التعلم الحضوري والتعلم عن بعد", "التعلم بالمراسلة"], correct: 2, explanation: "التعلم المدمج يجمع بين الحضوري والرقمي للاستفادة من مزايا كل منهما." },
       { q: "ما المقصود بالفصل المقلوب (Classe Inversée)؟", options: ["تغيير ترتيب الطاولات", "يدرس التلميذ الدرس في البيت ويطبق في القسم", "إلغاء الواجبات المنزلية", "تبادل الأدوار بين المعلم والتلميذ"], correct: 1, explanation: "في الفصل المقلوب يشاهد التلميذ الدرس في المنزل (فيديو/مستند) ويخصص وقت القسم للتطبيق والنقاش." },
       { q: "أي من البرامج التالية يُستخدم لإنشاء عروض تقديمية تعليمية؟", options: ["Excel", "PowerPoint", "Access", "Notepad"], correct: 1, explanation: "PowerPoint من أشهر برامج إنشاء العروض التقديمية التعليمية." },
       { q: "ما هي الحوسبة السحابية (Cloud Computing) في السياق التعليمي؟", options: ["تخزين الملفات في الحاسوب المحلي فقط", "خدمات تخزين ومعالجة البيانات عبر الإنترنت يمكن الوصول إليها من أي مكان", "شبكة محلية داخل المدرسة", "حماية البيانات"], correct: 1, explanation: "الحوسبة السحابية تتيح التخزين والوصول للملفات من أي جهاز متصل بالإنترنت مثل Google Drive." },
-      { q: "ما هو الهدف من إدماج تكنولوجيا الاتصال في المناهج الدراسية الجزائرية؟", options: ["استبدال المعلم", "تحديث طرق التدريس وتحسين جودة التعلم", "تقليل ساعات الدراسة", "إلغاء الكتب المدرسية"], correct: 1, explanation: "الهدف هو تحديث الممارسات البيداغوجية وتحسين جودة التعليم وليس استبدال المعلم." },
+      { q: "ما هو الهدف من إدماج تكنولوجيا الاتصال في المناهج الدراسية الجزائرية؟", options: ["استبدال المعلم", "تحديث طرق التدريس وتحسين جودة التعليم", "تقليل ساعات الدراسة", "إلغاء الكتب المدرسية"], correct: 1, explanation: "الهدف هو تحديث الممارسات البيداغوجية وتحسين جودة التعليم وليس استبدال المعلم." },
       { q: "ما هو البريد الإلكتروني المهني وما أهميته للمعلم؟", options: ["بريد شخصي للتسلية", "وسيلة تواصل رسمية مع الإدارة والزملاء وأولياء الأمور", "حساب على فيسبوك", "رقم هاتف"], correct: 1, explanation: "البريد الإلكتروني المهني أداة أساسية للتواصل الرسمي في البيئة التعليمية." },
       { q: "ما المقصود بالموارد التعليمية المفتوحة (OER)؟", options: ["كتب مدفوعة", "موارد تعليمية متاحة مجاناً للاستخدام والتعديل والمشاركة", "برامج محمية بحقوق النشر", "مواقع ترفيهية"], correct: 1, explanation: "OER هي موارد تعليمية مفتوحة المصدر يمكن استخدامها وتكييفها بحرية." },
       { q: "ما هي أهمية الأمن الرقمي للمعلم؟", options: ["غير مهم", "حماية البيانات الشخصية وبيانات التلاميذ من الاختراق", "فقط لحماية الحاسوب من الفيروسات", "منع التلاميذ من استخدام الإنترنت"], correct: 1, explanation: "الأمن الرقمي يشمل حماية جميع البيانات الشخصية والمهنية وبيانات التلاميذ." },
@@ -1013,7 +1016,12 @@ function switchTab(tab) {
   document.querySelectorAll('[id^="section-"]').forEach(s => s.classList.add('hidden'));
   document.querySelectorAll('[id^="tab-"]').forEach(t => { t.className = 'px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap text-slate-300 hover:bg-white/10 transition-all flex items-center gap-2 btn-3d'; });
   document.getElementById('section-' + tab).classList.remove('hidden');
-  document.getElementById('tab-' + tab).className = 'tab-active px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-2 btn-3d';
+  
+  const activeTab = document.getElementById('tab-' + tab);
+  if(activeTab) {
+      activeTab.className = 'tab-active px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-2 btn-3d';
+  }
+  
   if (tab === 'ranks') renderRanks();
   lucide.createIcons();
 }
